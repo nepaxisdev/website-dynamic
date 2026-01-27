@@ -81,7 +81,21 @@
 		<span class="sr-only">Nepaxis: </span>Article Collection
 	</h1>
 </section>
-<section class="blog__filter bg-dark-600 rounded-md p-4 mb-4"></section>
+<section class="blog__filter bg-dark-600 rounded-md p-4 mb-4">
+	<h2 class="font-mono font-regular uppercase dark-500 regular-16" id="blog__filter-title">
+		Filter
+	</h2>
+
+	<div class="select--category fl-row gap-1 al-center jc-center">
+		<select></select>
+		<input type="search" bind:value={search_query} />
+		<button class="btn--large btn--accent">
+			<span class="btn__wrapper">
+				<span class="btn__text">Search</span>
+			</span>
+		</button>
+	</div>
+</section>
 <section class="blog__main-section mb-4 mb-md-6 mb-lg-9" id="blogMainSection">
 	<div class="fl-row jc-between al-center mb-3">
 		<p class="uppercase font-mono neutral-400 mb-0">
