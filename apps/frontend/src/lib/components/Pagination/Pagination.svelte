@@ -51,7 +51,6 @@
 	</a>
 	<ul class="pagination__list strip-style">
 		{#each totalPageArray as page}
-			{console.log(page, currentPage)}
 			<li>
 				<a
 					href={`/blog?page=${page}`}

@@ -34,7 +34,6 @@ export function initAsciiTimeline() {
 				art.style.pointerEvents = 'none';
 			},
 			onEnterBack: () => {
-				console.log('now');
 				const art = document.querySelector('.ascii__art')! as HTMLElement;
 				art.style.pointerEvents = 'auto';
 			}

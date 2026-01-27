@@ -10,6 +10,8 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 COPY apps/frontend/package.json ./apps/frontend/
 
+RUN npm install --os=linux --libc=musl --cpu=arm64 sharp
+
 # Install all dependencies (including dev dependencies)
 RUN npm ci
 

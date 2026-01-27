@@ -9,10 +9,7 @@ export function initHeroTimeline() {
 			scrollTrigger: {
 				trigger: '.hero__section',
 				start: 'top 100%',
-				toggleActions: 'play pause resume reset',
-				onEnter: () => {
-					console.log('entered');
-				}
+				toggleActions: 'play pause resume reset'
 			}
 		})
 		.addLabel('start');

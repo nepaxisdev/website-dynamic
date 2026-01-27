@@ -13,6 +13,6 @@
     "@payloadcms/db-postgres": "^3.72.0",
     "@payloadcms/next": "^3.72.0",
     "@payloadcms/richtext-lexical": "^3.72.0",
-    "payload": "^3.w.0"
+    "payload": "^3.72.0"
   }
 }

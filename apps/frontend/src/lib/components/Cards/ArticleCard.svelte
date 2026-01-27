@@ -168,6 +168,7 @@
 					border-radius: var(--card-hover-radius);
 					object-position: var(--_image-object-position, center left);
 					transition: object-position 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+					background-color: var(--clr-neutral-400);
 				}
 			}
 			&__content {

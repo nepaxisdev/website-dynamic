@@ -152,7 +152,7 @@
 			</a>
 		</h1>
 		<button
-			class="menu__btn btn--outline btn--inverse btn--narrow btn--primary"
+			class="menu__btn btn--outline btn--white btn--narrow btn--primary"
 			aria-label="Open Menu"
 			onclick={toggleNavBar}
 		>
