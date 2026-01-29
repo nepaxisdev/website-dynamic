@@ -12,8 +12,6 @@
 		contentText: ''
 	};
 
-	let isValid: boolean = $state(false);
-
 	type Validation = string | false;
 
 	function validateFullName(): Validation {
@@ -56,12 +54,17 @@
 		}
 		return false;
 	}
+	// let phoneNumberError = $derived(validatePhoneNumber() ? true : false);
+	// let fullNameError = $derived(validateFullName() ? true : false);
+	// let companyNameError = $derived(validateCompanyName() ? true : false);
+	// let emailError = $derived(validateEmail() ? true : false);
+	// let messageError = $derived(validateMessage() ? true : false);
 	let errors = $derived({
-		phoneNumber: validatePhoneNumber() ? true : false,
-		fullName: validateFullName() ? true : false,
-		companyName: validateCompanyName() ? true : false,
-		email: validateEmail() ? true : false,
-		message: validateMessage() ? true : false
+		phoneNumber: validateFullName(),
+		fullName: validateFullName(),
+		companyName: validateCompanyName(),
+		email: validateEmail(),
+		message: validateMessage()
 	});
 	const formData = $derived({
 		phoneNumber: phoneNumber,
@@ -71,8 +74,6 @@
 		message: message
 	});
 	let showModal = $state(false);
-	let notifyError = $state(false);
-	let showErrors: boolean = $state(false);
 	const validity: boolean = $derived(
 		!validateFullName() &&
 			!validateCompanyName() &&
@@ -80,13 +81,12 @@
 			!validatePhoneNumber() &&
 			!validateMessage()
 	);
-	$inspect(errors);
+	let showErrors: boolean = $derived(!validity);
+	// $inspect(errors);
 
 	async function submitForm(event: SubmitEvent) {
 		event.preventDefault();
-		if (!validity) {
-			showErrors = true;
-		} else {
+		if (validity) {
 			const res = await fetch('/api/submitContact', {
 				method: 'post',
 				body: JSON.stringify(formData),
@@ -144,7 +144,7 @@
 							</div>
 						</div>
 					</label>
-					<label for="companyName" class="form__group" class:error={!validateCompanyName}>
+					<label for="companyName" class="form__group" class:error={errors.companyName}>
 						<div class="form__line">
 							<div class="form__description regular-25 tracking-4tight neutral-300">
 								representing &nbsp;
@@ -167,7 +167,7 @@
 							</div>
 						</div>
 					</label>
-					<label for="email" class="form__group" class:error={!validateEmail}>
+					<label for="email" class="form__group" class:error={errors.email}>
 						<div class="form__line">
 							<div class="form__description regular-25 tracking-4tight neutral-300">
 								You can contact me at &nbsp;
@@ -191,7 +191,7 @@
 							</div>
 						</div>
 					</label>
-					<label for="phoneNumber" class="form__group" class:error={!validatePhoneNumber}>
+					<label for="phoneNumber" class="form__group" class:error={errors.phoneNumber}>
 						<div class="form__line">
 							<div class="form__description regular-25 tracking-4tight neutral-300">
 								or call us on &nbsp;&nbsp;
@@ -214,7 +214,7 @@
 							</div>
 						</div>
 					</label>
-					<label for="message" class="form__group" class:error={!validateMessage}>
+					<label for="message" class="form__group" class:error={errors.message}>
 						<div class="form__line">
 							<div class="form__description regular-25 tracking-4tight neutral-300">
 								And I want to say:&nbsp;&nbsp;
@@ -297,7 +297,7 @@
 		{/snippet}
 		{#snippet content()}
 			{modal.contentText}
-			{#if notifyError}
+			{#if !validity}
 				<div>
 					If it persists after some time, please email us at: <a
 						class="link"
