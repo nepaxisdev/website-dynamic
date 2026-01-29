@@ -236,6 +236,24 @@
 			}
 		}
 	}
+
+	@media (min-width: 768px) {
+		.article {
+			&-card {
+				&:hover {
+					background-color: var(--clr-neutral-1000);
+					--_padding-x: var(--_padding-y);
+					--_image-object-position: center right;
+					border-radius: var(--card-hover-radius);
+
+					&,
+					& + :global(.article-card) {
+						--_border-color: transparent;
+					}
+				}
+			}
+		}
+	}
 	@container article-card-wrapper (min-width: 1200px) {
 		.article-card {
 			--_card-gap: 4rem;

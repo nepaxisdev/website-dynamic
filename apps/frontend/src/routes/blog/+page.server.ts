@@ -41,6 +41,7 @@ export const load: PageServerLoad = async ({ url }) => {
 	}
 	const whereClause = {
 		and: [
+			{ _status: { equals: 'published' } },
 			// 1. Mandatory Category Filter (if selected)
 			...(category && category !== '' ? [{ 'category.slug': { equals: category } }] : []),
 
@@ -77,21 +78,9 @@ export const load: PageServerLoad = async ({ url }) => {
 		where: whereClause,
 		pagination: {
 			limit: config.blog.articlesPerPage
-		},
-		page: page
+		}
 	});
 
-	// const usedIds = [
-	// 	...new Set(
-	// 		result.docs.map((doc: Article) => {
-	// 			if (typeof doc.category == 'number') {
-	// 				return doc.category;
-	// 			} else {
-	// 				return doc.category.id;
-	// 			}
-	// 		})
-	// 	)
-	// ];
 	const categories = await payload.find({
 		collection: 'categories'
 	});

@@ -1,8 +1,8 @@
-@use '../base/helpers/type-helper' as *;
-@use '../abstracts/mixins' as *;
-@use '../abstracts/variables' as *;
+@use "../base/helpers/type-helper" as *;
+@use "../abstracts/mixins" as *;
+@use "../abstracts/variables" as *;
 
-[class*='form'] {
+[class*="form"] {
 	--_error-color: hsl(14 100% 50%);
 	--_pad_x: 1.25rem;
 }
@@ -16,7 +16,7 @@
 				.form__input {
 					@include media(992px) {
 						&:after {
-							content: 'Tab';
+							content: "Tab";
 							position: absolute;
 							inset-inline-end: var(--_pad_x);
 							inset-block-start: 50%;
@@ -48,6 +48,12 @@
 				}
 			}
 			.error-message {
+				text-transform: uppercase;
+				font-family: "Space Mono";
+				letter-spacing: 0.01em;
+				font-size: 0.75rem;
+				text-align: right;
+				display: block;
 				visibility: visible;
 				opacity: 1;
 				transition: opacity 0.2s ease-out;
@@ -104,6 +110,7 @@
 		}
 		&:autofill {
 			border: 1px solid hsl(0 0% 100% / 15%);
+			box-shadow: 0 0 0 5rem hsl(0 0% 10% / 100%) inset !important;
 			-webkit-box-shadow: 0 0 0 5rem hsl(0 0% 10% / 100%) inset !important;
 			-webkit-text-fill-color: white !important;
 		}
@@ -128,12 +135,14 @@
 			}
 			&:autofill {
 				border: 1px solid var(--clr-neutral-300);
+				box-shadow: 0 0 0 5rem hsl(from var(--clr-neutral-700) h s l / 5%) inset !important;
 				-webkit-box-shadow: 0 0 0 5rem hsl(from var(--clr-neutral-700) h s l / 5%) inset !important;
 				-webkit-text-fill-color: var(--clr-neutral-700) !important;
 			}
 
 			&:-webkit-autofill {
 				border: 1px solid var(--clr-neutral-300);
+				box-shadow: 0 0 0 5rem hsl(from var(--clr-neutral-700) h s l / 5%) inset !important;
 				-webkit-box-shadow: 0 0 0 5rem hsl(from var(--clr-neutral-700) h s l / 5%) inset !important;
 				-webkit-text-fill-color: var(--clr-neutral-700) !important;
 			}
@@ -164,7 +173,7 @@
 	&__input {
 		position: relative;
 		inline-size: min(25rem, 100%);
-		&:has(.form__control[type='email']) {
+		&:has(.form__control[type="email"]) {
 			inline-size: min(40rem, 100%);
 		}
 		&:has(textarea) {
@@ -188,6 +197,7 @@
 	position: absolute;
 	top: calc(100% + 0.5em);
 	left: 0;
+	padding-inline: var(--_pad_x);
 	color: var(--_error-color);
 	visibility: hidden;
 	opacity: 0;
@@ -198,7 +208,7 @@
 	&--required {
 		--indicator-color: var(--clr-neutral-500);
 		&:after {
-			content: 'required';
+			content: "required";
 			position: absolute;
 			inset-inline-end: 0;
 			inset-block-start: 0;
@@ -217,7 +227,7 @@
 	}
 }
 
-[class*='select-'] {
+[class*="select-"] {
 	appearance: none;
 	--_border-color: var(--clr-neutral-600);
 	--_background-color: var(--_clr-neutral-700);
@@ -243,8 +253,8 @@
 	}
 }
 
-[class*='select-'],
-[class*='form-'] {
+[class*="select-"],
+[class*="form-"] {
 	@media screen and (max-width: 991px) {
 		--_pad_y: 0.75em;
 	}

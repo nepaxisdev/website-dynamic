@@ -1,108 +1,149 @@
 <script lang="ts">
 	import Modal from '$lib/components/Modal/Modal.svelte';
+	type Validation = string | true;
+	type ValidationFunction = (a: string) => Validation;
+	const ACCESS_KEY = `5e3a9806-0470-49b0-ab74-d7109400cdc6`;
+	function validateFullName(value: string): Validation {
+		if (!value.trim() || value.trim().length <= 0) {
+			return 'Full Name is required';
+		}
+		return true;
+	}
+	function validateCompanyName(value: string): Validation {
+		if (value.trim() && value.trim().length < 2) {
+			return 'Company Name must be at least 2 characters';
+		}
+		return true;
+	}
+	function validateEmail(value: string): Validation {
+		if (!value.trim() || value.trim().length <= 0) {
+			return 'Email is required';
+		} else {
+			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+			if (!emailRegex.test(value.trim())) {
+				return 'Enter a valid email';
+			}
+		}
+		return true;
+	}
+	function validatePhoneNumber(value: string): Validation {
+		const phoneRegex = /^[0-9+\-\s()]{7,}$/;
+		if (value.trim()) {
+			if (!phoneRegex.test(value.trim())) {
+				return 'Enter a valid phone number.';
+			}
+		}
+		return true;
+	}
+	function validateMessage(value: string): Validation {
+		if (value.trim() && value.trim().length <= 5) {
+			return 'Message must be at least 5 characters.';
+		} else if (value.trim() && value.trim().length > 500) {
+			return 'Message must be at most 500 characters.';
+		}
+		return true;
+	}
+	class FormControl {
+		value: string = $state('');
+		error: boolean = $state(false);
+		errorMessage: string = $state('');
+		changed: boolean = $state(false);
+		validationFunction: ValidationFunction = (): Validation => {
+			return true;
+		};
 
-	let fullName: string = $state('');
-	let companyName: string = $state('');
-	let email: string = $state('');
-	let phoneNumber: string = $state('');
-	let message: string = $state('');
+		constructor(config?: { value?: string; validate?: ValidationFunction } | undefined | null) {
+			if (config && config.value) {
+				this.value = config.value;
+			}
+			if (config && config.validate) {
+				this.validationFunction = config.validate;
+			}
+			return this;
+		}
+
+		setValidation(fn: ValidationFunction) {
+			this.validationFunction = fn;
+		}
+
+		validate() {
+			const err = this.validationFunction.call(this, this.value);
+			if (typeof err === 'string') {
+				this.error = true;
+				this.errorMessage = err;
+			} else {
+				this.error = false;
+				this.errorMessage = '';
+			}
+			if (!this.changed) {
+				this.changed = true;
+			}
+		}
+	}
+
+	let fullName = new FormControl({ validate: validateFullName });
+	let companyName = new FormControl({ validate: validateCompanyName });
+	let email = new FormControl({ validate: validateEmail });
+	let phoneNumber = new FormControl({ validate: validatePhoneNumber });
+	let message = new FormControl({ validate: validateMessage });
 
 	const modal = {
 		headerText: '',
 		contentText: ''
 	};
 
-	type Validation = string | false;
-
-	function validateFullName(): Validation {
-		if (!fullName.trim() || fullName.trim().length <= 0) {
-			return 'Full Name is required';
-		}
-		return false;
-	}
-	function validateCompanyName(): Validation {
-		if (companyName.trim() && companyName.trim().length < 2) {
-			return 'Company Name must be at least 2 characters';
-		}
-		return false;
-	}
-	function validateEmail(): Validation {
-		if (!email.trim() || email.trim().length <= 0) {
-			return 'Email is required';
-		} else {
-			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-			if (!emailRegex.test(email.trim())) {
-				return 'Enter a valid email';
-			}
-		}
-		return false;
-	}
-	function validatePhoneNumber(): Validation {
-		const phoneRegex = /^[0-9+\-\s()]{7,}$/;
-		if (phoneNumber.trim()) {
-			if (!phoneRegex.test(phoneNumber.trim())) {
-				return 'Enter a valid phone number.';
-			}
-		}
-		return false;
-	}
-	function validateMessage(): Validation {
-		if (message.trim() && message.trim().length < 5) {
-			return 'Message must be at least 5 characters.';
-		} else if (message.trim() && message.trim().length > 500) {
-			return 'Message must be at most 500 characters.';
-		}
-		return false;
-	}
-	// let phoneNumberError = $derived(validatePhoneNumber() ? true : false);
-	// let fullNameError = $derived(validateFullName() ? true : false);
-	// let companyNameError = $derived(validateCompanyName() ? true : false);
-	// let emailError = $derived(validateEmail() ? true : false);
-	// let messageError = $derived(validateMessage() ? true : false);
-	let errors = $derived({
-		phoneNumber: validateFullName(),
-		fullName: validateFullName(),
-		companyName: validateCompanyName(),
-		email: validateEmail(),
-		message: validateMessage()
-	});
 	const formData = $derived({
-		phoneNumber: phoneNumber,
-		fullName: fullName,
-		companyName: companyName,
-		email: email,
-		message: message
+		phoneNumber: phoneNumber.value,
+		fullName: fullName.value,
+		companyName: companyName.value,
+		email: email.value,
+		message: message.value,
+		access_key: ACCESS_KEY
 	});
 	let showModal = $state(false);
-	const validity: boolean = $derived(
-		!validateFullName() &&
-			!validateCompanyName() &&
-			!validateEmail() &&
-			!validatePhoneNumber() &&
-			!validateMessage()
+	let showErrorInModal = $state(false);
+	let validity = $derived(
+		(!fullName.changed || !fullName.error) &&
+			(!companyName.changed || !companyName.error) &&
+			(!email.changed || !email.error) &&
+			(!phoneNumber.changed || !phoneNumber.error) &&
+			(!message.changed || !message.error) &&
+			fullName.changed &&
+			email.changed // Ensure required fields are filled
 	);
-	let showErrors: boolean = $derived(!validity);
-	// $inspect(errors);
 
 	async function submitForm(event: SubmitEvent) {
 		event.preventDefault();
 		if (validity) {
-			const res = await fetch('/api/submitContact', {
-				method: 'post',
-				body: JSON.stringify(formData),
-				headers: {
-					Accept: 'application/json',
-					'Content-type': 'application/json'
+			try {
+				const res = await fetch('https://api.web3forms.com/submit', {
+					method: 'post',
+					body: JSON.stringify(formData),
+					headers: {
+						Accept: 'application/json',
+						'Content-type': 'application/json'
+					}
+				});
+				const json = await res.json();
+				if (json.success) {
+					modal.headerText = 'Your message has been submitted.';
+					modal.contentText = "We've received your message and will get back to you very soon.";
+					showModal = true;
+					fullName.value = '';
+					companyName.value = '';
+					email.value = '';
+					phoneNumber.value = '';
+					message.value = '';
+				} else {
+					modal.headerText = `Error ${json.status}: ${json.message}`;
+					modal.contentText = `${json.detail}`;
+					showModal = true;
+					showErrorInModal = true;
 				}
-			});
-			const json = await res.json();
-			if (json.status === 200) {
-				modal.headerText = 'Your message has been submitted.';
-				modal.contentText = "We've received your message and will get back to you very soon.";
-				showModal = true;
-			} else {
-				modal.headerText = `${json.status}: ${json.message}`;
-				modal.contentText = `${json.description}`;
+			} catch (e: any) {
+				console.error('Error:', e);
+				modal.headerText = 'Network Error';
+				modal.contentText = 'Unable to submit form. Please try again.';
 				showModal = true;
 			}
 		}
@@ -120,7 +161,7 @@
 		<form id="contactForm" class="contact__form mb-lg-9 mb-6 mb-lg-8" onsubmit={submitForm}>
 			<div class="grid-lg-row gap-lg-3 gap-xl-0">
 				<div class="fl-col row-gap-3 col-gap-2 col-lg-10 col-xl-8 col-2xl-6 mb-3 mb-lg-0">
-					<label for="fullName" class="form__group" class:error={errors.phoneNumber}>
+					<label for="fullName" class="form__group" class:error={fullName.error}>
 						<div class="form__line">
 							<div class="form__description regular-25 tracking-4tight neutral-300">
 								My Name is &nbsp;
@@ -130,21 +171,23 @@
 									type="text"
 									class="form__control"
 									name="fullName"
-									bind:value={fullName}
+									oninput={() => {
+										fullName.validate();
+									}}
+									bind:value={fullName.value}
 									id="fullName"
 									placeholder="Full Name"
-									onchange={validateFullName}
 									aria-required="true"
 								/>
 								<span class="error-message">
-									{#if showErrors && errors.fullName !== false}
-										{errors.fullName}
+									{#if fullName.changed && fullName.error}
+										{fullName.errorMessage}
 									{/if}
 								</span>
 							</div>
 						</div>
 					</label>
-					<label for="companyName" class="form__group" class:error={errors.companyName}>
+					<label for="companyName" class="form__group" class:error={companyName.error}>
 						<div class="form__line">
 							<div class="form__description regular-25 tracking-4tight neutral-300">
 								representing &nbsp;
@@ -154,20 +197,22 @@
 									type="text"
 									class="form__control"
 									name="companyName"
-									bind:value={companyName}
-									onchange={validateCompanyName}
+									bind:value={companyName.value}
+									oninput={() => {
+										companyName.validate();
+									}}
 									id="companyName"
 									placeholder="Company Name"
 								/>
 								<span class="error-message">
-									{#if showErrors && errors.companyName !== false}
-										{errors.companyName}
+									{#if companyName.changed && companyName.error}
+										{companyName.errorMessage}
 									{/if}
 								</span>
 							</div>
 						</div>
 					</label>
-					<label for="email" class="form__group" class:error={errors.email}>
+					<label for="email" class="form__group" class:error={email.error}>
 						<div class="form__line">
 							<div class="form__description regular-25 tracking-4tight neutral-300">
 								You can contact me at &nbsp;
@@ -176,22 +221,24 @@
 								<input
 									type="email"
 									class="form__control"
-									bind:value={email}
+									bind:value={email.value}
+									oninput={() => {
+										email.validate();
+									}}
 									name="email"
 									id="email"
-									onchange={validateEmail}
 									placeholder="Email Address"
 									aria-required="true"
 								/>
 								<span class="error-message">
-									{#if showErrors && errors.email !== false}
-										{errors.email}
+									{#if email.changed && email.error}
+										{email.errorMessage}
 									{/if}
 								</span>
 							</div>
 						</div>
 					</label>
-					<label for="phoneNumber" class="form__group" class:error={errors.phoneNumber}>
+					<label for="phoneNumber" class="form__group" class:error={phoneNumber.error}>
 						<div class="form__line">
 							<div class="form__description regular-25 tracking-4tight neutral-300">
 								or call us on &nbsp;&nbsp;
@@ -202,19 +249,21 @@
 									class="form__control"
 									name="phoneNumber"
 									id="phoneNumber"
-									bind:value={phoneNumber}
-									onchange={validatePhoneNumber}
+									bind:value={phoneNumber.value}
+									oninput={() => {
+										phoneNumber.validate();
+									}}
 									placeholder="Phone Number"
 								/>
 								<span class="error-message">
-									{#if showErrors && errors.phoneNumber !== false}
-										{errors.phoneNumber}
+									{#if phoneNumber.changed && phoneNumber.error !== true}
+										{phoneNumber.errorMessage}
 									{/if}
 								</span>
 							</div>
 						</div>
 					</label>
-					<label for="message" class="form__group" class:error={errors.message}>
+					<label for="message" class="form__group" class:error={message.error}>
 						<div class="form__line">
 							<div class="form__description regular-25 tracking-4tight neutral-300">
 								And I want to say:&nbsp;&nbsp;
@@ -223,15 +272,17 @@
 								<textarea
 									name="message"
 									id="message"
-									bind:value={message}
+									bind:value={message.value}
 									class="form__control"
+									oninput={() => {
+										message.validate();
+									}}
 									placeholder="Message"
-									onchange={validateMessage}
 									rows="4"
 								></textarea>
 								<span class="error-message">
-									{#if showErrors && errors.message !== false}
-										{errors.message}
+									{#if message.changed && message.error !== true}
+										{message.errorMessage}
 									{/if}
 								</span>
 							</div>
@@ -258,7 +309,7 @@
 						<a class="link" href="tel:+971 56 144 8979">+971 56 144 8979</a>
 					</div>
 					<address class="uppercase no-italics regular-13 neutral-200">
-						RAG Global Business Hun. <br />
+						RAG Global Business Hub <br />
 						Al Qusais 2, 102-36 <br />
 						Dubai, United Arab Emirates <br />
 					</address>
@@ -297,7 +348,7 @@
 		{/snippet}
 		{#snippet content()}
 			{modal.contentText}
-			{#if !validity}
+			{#if showErrorInModal}
 				<div>
 					If it persists after some time, please email us at: <a
 						class="link"

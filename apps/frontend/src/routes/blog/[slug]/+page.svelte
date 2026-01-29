@@ -7,10 +7,12 @@
 	import moment from 'moment';
 	import ResponsiveImage from '$lib/components/Image/ResponsiveImage.svelte';
 	import RichText from '$lib/components/RichText/RichText.svelte';
+	import ArticleCard from '$lib/components/Cards/ArticleCard.svelte';
 
-	const { data }: { data: { article: Article } } = $props();
+	const { data }: { data: { article: Article; recommended_articles: Article[] } } = $props();
 	const mainData = $derived(data.article) as Article;
-
+	const recommendedArticles = $derived(data.recommended_articles);
+	$inspect(recommendedArticles);
 	const created_on = $derived.by(() => {
 		return moment(mainData.createdAt).format('MMM DD, YYYY');
 	});
@@ -107,7 +109,7 @@
 </section>
 <section class="additional__section py-4 py-md-6 py-lg-8 full-width content-grid">
 	<div class="grid-row">
-		<div class="col-lg-4">
+		<div class="col-lg-4 share__section">
 			<h2 class="heading-2 mb-2 mb-md-3 mb-lg-4">Thank you for reading the article.</h2>
 			<Share
 				title={mainData.title}
@@ -140,9 +142,21 @@
 					>
 				</a>
 			</div>
-			<ul class="strip-style" aria-label="Additional Articles">
-				<li></li>
-			</ul>
+			{#if recommendedArticles && recommendedArticles.length > 0}
+				<ul class="strip-style blog__articles-grid" aria-label="Additional Articles">
+					{#each recommendedArticles as article}
+						<ArticleCard {article} tag="li" />
+					{/each}
+				</ul>
+			{/if}
 		</div>
 	</div>
 </section>
+
+<style>
+	.share__section {
+		position: sticky;
+		inset-block-start: 5rem;
+		inset-inline-start: 0;
+	}
+</style>

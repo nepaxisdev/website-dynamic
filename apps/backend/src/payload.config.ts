@@ -4,11 +4,12 @@ import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
-import { seoPlugin } from '@payloadcms/plugin-seo';
+import { seoPlugin } from '@payloadcms/plugin-seo'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Categories } from './collections/BlogCategory'
 import { Articles } from './collections/BlogArticle'
+import { SiteSettings } from './global/SiteSetttings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -21,25 +22,25 @@ export default buildConfig({
     },
   },
   collections: [Users, Media, Categories, Articles],
+  globals: [SiteSettings],
   editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET || '',
+  secret: process.env.PRIVATE_PAYLOAD_SECRET || '',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URI || '',
+      connectionString: process.env.PRIVATE_DATABASE_URI || '',
     },
   }),
   sharp,
   plugins: [
     seoPlugin({
-      collections: [
-        'Media',
-      ],
+      collections: ['articles'],
       uploadsCollection: 'media',
       generateTitle: ({ doc }) => `${doc.title} | Nepaxis`,
-      generateDescription: ({ doc }) => doc.excerpt
-    })
+      generateDescription: ({ doc }) => doc.short_quote,
+      generateImage: ({ doc }) => doc.cover_image,
+    }),
   ],
 })

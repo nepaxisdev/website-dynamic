@@ -91,8 +91,12 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'site-settings': SiteSetting;
+  };
+  globalsSelect: {
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+  };
   locale: null;
   user: User & {
     collection: 'users';
@@ -256,6 +260,14 @@ export interface Article {
     [k: string]: unknown;
   };
   cover_image: number | Media;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -465,6 +477,13 @@ export interface ArticlesSelect<T extends boolean = true> {
   slug?: T;
   text?: T;
   cover_image?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -508,6 +527,124 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  basic_settings: {
+    name: string;
+    tagline: string;
+    description: string;
+    contact: {
+      address: {
+        address_line_1?: string | null;
+        address_line_2?: string | null;
+        address_line_3?: string | null;
+        map_link?: string | null;
+      };
+      contact_email: string;
+      phone_number_1: string;
+      phone_number_2?: string | null;
+      career_email?: string | null;
+      support_email?: string | null;
+    };
+  };
+  page_seo: {
+    site_name?: string | null;
+    title_suffix?: string | null;
+    default_title?: string | null;
+    default_keywords: {
+      keyword?: string | null;
+      id?: string | null;
+    }[];
+    default_og_image: number | Media;
+    analytics?: {
+      google_analytics_key?: string | null;
+      ahref_id?: string | null;
+    };
+  };
+  social_media?: {
+    facebook?: string | null;
+    instagram?: string | null;
+    linkedin?: string | null;
+    x?: string | null;
+    whatsapp?: string | null;
+    tiktok?: string | null;
+    youtube?: string | null;
+    pinterest?: string | null;
+    threads?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  basic_settings?:
+    | T
+    | {
+        name?: T;
+        tagline?: T;
+        description?: T;
+        contact?:
+          | T
+          | {
+              address?:
+                | T
+                | {
+                    address_line_1?: T;
+                    address_line_2?: T;
+                    address_line_3?: T;
+                    map_link?: T;
+                  };
+              contact_email?: T;
+              phone_number_1?: T;
+              phone_number_2?: T;
+              career_email?: T;
+              support_email?: T;
+            };
+      };
+  page_seo?:
+    | T
+    | {
+        site_name?: T;
+        title_suffix?: T;
+        default_title?: T;
+        default_keywords?:
+          | T
+          | {
+              keyword?: T;
+              id?: T;
+            };
+        default_og_image?: T;
+        analytics?:
+          | T
+          | {
+              google_analytics_key?: T;
+              ahref_id?: T;
+            };
+      };
+  social_media?:
+    | T
+    | {
+        facebook?: T;
+        instagram?: T;
+        linkedin?: T;
+        x?: T;
+        whatsapp?: T;
+        tiktok?: T;
+        youtube?: T;
+        pinterest?: T;
+        threads?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -6,7 +6,7 @@ import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin';
 gsap.registerPlugin(ScrambleTextPlugin, ScrollTrigger, SplitText);
 
 export function initFooterTimeline() {
-	const footer = document.querySelector('.footer_ection') as HTMLElement;
+	const footer = document.querySelector('.footer__section') as HTMLElement;
 	const contact__section = document.querySelector('.contact__section') as HTMLElement;
 
 	if (!contact__section || !footer) return;

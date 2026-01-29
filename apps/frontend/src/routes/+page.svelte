@@ -5,9 +5,14 @@
 	import { initAnimations } from '$lib/js/animations';
 	import { afterNavigate } from '$app/navigation';
 	import ContactSection from '$lib/components/Page/Home/ContactSection.svelte';
+	import { initFloatingImages } from '$lib/js/animations/hover-image';
 
 	afterNavigate(() => {
 		initAnimations();
+	});
+
+	$effect(() => {
+		initFloatingImages();
 	});
 </script>
 

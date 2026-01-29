@@ -6,6 +6,7 @@
 	import favicon from '$lib/assets/logo.svg';
 	import faviconDark from '$lib/assets/logo-dark.svg';
 	import { afterNavigate, beforeNavigate } from '$app/navigation';
+	import Newsletter from '$lib/components/Newsletter/Newsletter.svelte';
 
 	const CURRENT_YEAR = new Date().getFullYear();
 
@@ -110,29 +111,7 @@
 							>
 						</div>
 					</div>
-					<form method="POST" id="newsletter" class="fl-md-row jc-md-between gap-4 w-100 mb-5">
-						<h6 class="uppercase leading-120 medium-15 shrink-0 w-md-30 mb-3 mb-md-0">
-							Newsletter
-						</h6>
-						<div class="w-100">
-							<label for="newsletterEmail" class="form__group mb-2">
-								<div class="form__input">
-									<input
-										type="email"
-										class="form__control inverted"
-										name="newsletterEmail"
-										placeholder="Email Address"
-										id="newsletterEmail"
-									/>
-								</div>
-							</label>
-							<button class="btn--black btn--subscribe" id="newsletterSubmit">
-								<span class="btn__wrapper">
-									<span class="btn__icon"></span><span class="btn__text">Subscribe</span>
-								</span>
-							</button>
-						</div>
-					</form>
+					<Newsletter />
 				</div>
 			</div>
 			<div

@@ -29,6 +29,7 @@
 	];
 
 	const { data } = $props();
+
 	const page_data = $derived(data.articles);
 	const categories = $derived(data.categories);
 	let hasNextPage = $derived(page_data.hasNextPage);
