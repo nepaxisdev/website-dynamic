@@ -20,6 +20,7 @@
 
 // 5. Components
 @use './components/loader' as *;
+@use './components/link' as *;
 @use './components/button' as *;
 @use './components/hint' as *;
 @use './components/input' as *;

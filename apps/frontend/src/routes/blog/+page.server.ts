@@ -39,7 +39,24 @@ export const load: PageServerLoad = async ({ url }) => {
 
 		sort = config.blog.sorting;
 	}
+	const whereClause = {
+		and: [
+			// 1. Mandatory Category Filter (if selected)
+			...(category && category !== '' ? [{ 'category.slug': { equals: category } }] : []),
 
+			// 2. Search Query Filter (Title OR Tags)
+			...(query
+				? [
+						{
+							or: [
+								{ title: { contains: query } },
+								{ 'tags.tag': { contains: query } } // Note: your schema field is 'tag' inside 'tags'
+							]
+						}
+					]
+				: [])
+		]
+	};
 	const result = await payload.find({
 		collection: 'articles',
 		sort: sort_search_res!.server,
@@ -54,22 +71,36 @@ export const load: PageServerLoad = async ({ url }) => {
 					thumbnail: true
 				}
 			},
-			where: {
-				'category.name': category ? { equals: category, contains: query } : undefined,
-				title: query ? { contains: query } : undefined,
-				'tags.name': query ? { contains: query } : undefined
-			},
 			tags: true,
 			category: true
 		},
+		where: whereClause,
 		pagination: {
 			limit: config.blog.articlesPerPage
 		},
 		page: page
 	});
 
+	// const usedIds = [
+	// 	...new Set(
+	// 		result.docs.map((doc: Article) => {
+	// 			if (typeof doc.category == 'number') {
+	// 				return doc.category;
+	// 			} else {
+	// 				return doc.category.id;
+	// 			}
+	// 		})
+	// 	)
+	// ];
+	const categories = await payload.find({
+		collection: 'categories'
+	});
+
 	return {
+		categories: categories.docs,
 		articles: result,
-		sorting_mode: sort
+		sorting_mode: sort,
+		query,
+		category
 	};
 };

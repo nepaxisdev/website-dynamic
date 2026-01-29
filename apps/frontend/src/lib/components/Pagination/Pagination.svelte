@@ -6,13 +6,13 @@
 		totalPages,
 		hasNextPage,
 		hasPrevPage,
-		pageChange = $bindable()
+		getData = $bindable()
 	}: {
 		currentPage: number;
 		totalPages: number;
 		hasNextPage: boolean;
 		hasPrevPage: boolean;
-		pageChange: (page: number) => void;
+		getData: (page: number) => void;
 	} & HTMLAttributes<HTMLElement> = $props();
 
 	const totalPageArray = $derived.by<number[]>(() => {
@@ -27,7 +27,7 @@
 		disabled={!hasPrevPage}
 		aria-disabled={!hasPrevPage}
 		onclick={() => {
-			pageChange(hasPrevPage ? currentPage - 1 : currentPage);
+			getData(hasPrevPage ? currentPage - 1 : currentPage);
 		}}
 	>
 		<span class="btn__wrapper">
@@ -63,7 +63,7 @@
 						if (page == currentPage) {
 							return;
 						}
-						pageChange(page);
+						getData(page);
 					}}
 					aria-current={page === currentPage ? 'page' : undefined}
 				>
@@ -80,7 +80,7 @@
 		class={'btn--icon btn--ghost btn--pagination'}
 		class:disabled={!hasNextPage}
 		onclick={() => {
-			pageChange(hasNextPage ? currentPage + 1 : currentPage);
+			getData(hasNextPage ? currentPage + 1 : currentPage);
 		}}
 		disabled={!hasNextPage}
 		aria-disabled={!hasNextPage}

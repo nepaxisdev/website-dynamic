@@ -1,10 +1,13 @@
-@use "../base/helpers/type-helper" as *;
-@use "../abstracts/mixins" as *;
-@use "../abstracts/variables" as *;
+@use '../base/helpers/type-helper' as *;
+@use '../abstracts/mixins' as *;
+@use '../abstracts/variables' as *;
+
+[class*='form'] {
+	--_error-color: hsl(14 100% 50%);
+	--_pad_x: 1.25rem;
+}
 .form {
 	&__group {
-		--_error-color: hsl(14 100% 50%);
-		--_pad_x: 1.25rem;
 		position: relative;
 		display: block;
 
@@ -13,7 +16,7 @@
 				.form__input {
 					@include media(992px) {
 						&:after {
-							content: "Tab";
+							content: 'Tab';
 							position: absolute;
 							inset-inline-end: var(--_pad_x);
 							inset-block-start: 50%;
@@ -29,7 +32,7 @@
 
 						&:has(textarea) {
 							&:after {
-								inset-block-start: var(--_pad-y, 0);
+								inset-block-start: var(--_pad_y, 0);
 								translate: 0 50%;
 							}
 						}
@@ -78,7 +81,7 @@
 
 	&__control {
 		inline-size: 100%;
-		padding: 0.5em var(--_pad_x);
+		padding: var(--_pad_y, 0.5em) var(--_pad_x, 1em);
 		background-color: transparent;
 		border: 1px solid var(--clr-neutral-600);
 		outline: none;
@@ -89,6 +92,7 @@
 		letter-spacing: -0.03em;
 		color: var(--clr-neutral-200);
 		font-weight: 400;
+
 		&::placeholder {
 			color: var(--clr-neutral-500);
 			text-transform: none;
@@ -124,15 +128,13 @@
 			}
 			&:autofill {
 				border: 1px solid var(--clr-neutral-300);
-				-webkit-box-shadow: 0 0 0 5rem
-					hsl(from var(--clr-neutral-700) h s l / 5%) inset !important;
+				-webkit-box-shadow: 0 0 0 5rem hsl(from var(--clr-neutral-700) h s l / 5%) inset !important;
 				-webkit-text-fill-color: var(--clr-neutral-700) !important;
 			}
 
 			&:-webkit-autofill {
 				border: 1px solid var(--clr-neutral-300);
-				-webkit-box-shadow: 0 0 0 5rem
-					hsl(from var(--clr-neutral-700) h s l / 5%) inset !important;
+				-webkit-box-shadow: 0 0 0 5rem hsl(from var(--clr-neutral-700) h s l / 5%) inset !important;
 				-webkit-text-fill-color: var(--clr-neutral-700) !important;
 			}
 		}
@@ -162,7 +164,7 @@
 	&__input {
 		position: relative;
 		inline-size: min(25rem, 100%);
-		&:has(.form__control[type="email"]) {
+		&:has(.form__control[type='email']) {
 			inline-size: min(40rem, 100%);
 		}
 		&:has(textarea) {
@@ -196,7 +198,7 @@
 	&--required {
 		--indicator-color: var(--clr-neutral-500);
 		&:after {
-			content: "required";
+			content: 'required';
 			position: absolute;
 			inset-inline-end: 0;
 			inset-block-start: 0;
@@ -212,5 +214,38 @@
 		&:focus-within {
 			--indicator-color: var(--clr-neutral-200);
 		}
+	}
+}
+
+[class*='select-'] {
+	appearance: none;
+	--_border-color: var(--clr-neutral-600);
+	--_background-color: var(--_clr-neutral-700);
+	--_color: var(--clr-neutral-200);
+	outline: none;
+	display: inline-flex;
+	padding: var(--_pad_y, 0.5em) 2em var(--_pad_y, 0.5em) var(--_pad_x, 1em);
+	border-radius: 100vmax;
+	background-color: var(--_background-color);
+	background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15.9902 10.889L12.0022 14.307L8.01416 10.889L8.99016 9.74902L12.0022 12.331L15.0142 9.75002L15.9902 10.889Z' fill='white'/%3E%3C/svg%3E%0A");
+	background-position: 96% center;
+	background-repeat: no-repeat;
+
+	border: 1px solid var(--_border-color);
+	font-size: 1rem;
+	color: var(--_color);
+	// transition: 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+
+	&:focus {
+		--_background-color: var(--clr-neutral-600);
+		--_color: var(--clr-neutral-100);
+		--_border-color: var(--set-ui-highlight-color);
+	}
+}
+
+[class*='select-'],
+[class*='form-'] {
+	@media screen and (max-width: 991px) {
+		--_pad_y: 0.75em;
 	}
 }

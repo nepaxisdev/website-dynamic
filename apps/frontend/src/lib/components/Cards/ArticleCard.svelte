@@ -161,7 +161,7 @@
 
 			&__image-wrapper {
 				img {
-					inline-size: min(20rem, 100%);
+					inline-size: min(17rem, 100%);
 					aspect-ratio: 1;
 					object-fit: cover;
 					border-radius: var(--card-hover-radius);

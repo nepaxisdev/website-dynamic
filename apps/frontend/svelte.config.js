@@ -10,7 +10,10 @@ const config = {
 	preprocess: [vitePreprocess(), mdsvex()],
 
 	kit: {
-		adapter: adapter()
+		adapter: adapter(),
+		alias: {
+			$backend: path.resolve("../backend")
+		}
 	},
 	extensions: ['.svelte', '.svx']
 };

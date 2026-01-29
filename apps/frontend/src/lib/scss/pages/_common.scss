@@ -82,6 +82,9 @@ a.link {
 .rounded-md {
 	border-radius: 2em;
 }
+.w-full {
+	inline-size: 100%;
+}
 .ascii {
 	&__section {
 		width: 100%;

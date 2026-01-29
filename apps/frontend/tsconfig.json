@@ -1,26 +1,26 @@
 {
-    "extends": "./.svelte-kit/tsconfig.json",
-    "compilerOptions": {
-        "rewriteRelativeImportExtensions": true,
-        "allowJs": true,
-        "checkJs": true,
-        "esModuleInterop": true,
-        "forceConsistentCasingInFileNames": true,
-        "resolveJsonModule": true,
-        "sourceMap": true,
-        "strict": true,
-        "moduleResolution": "bundler",
-        "skipLibCheck": true,
-        "paths": {
-            "$lib": [
-                "./src/lib"
-            ],
-            "$lib/*": [
-                "./src/lib/*"
-            ],
-            "$backend/*": [
-                "../backend/*"
-            ]
-        }
-    }
+	"extends": "./.svelte-kit/tsconfig.json",
+	"compilerOptions": {
+		"rewriteRelativeImportExtensions": true,
+		"allowJs": true,
+		"checkJs": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"sourceMap": true,
+		"strict": true,
+		"moduleResolution": "bundler",
+		"skipLibCheck": true,
+		"paths": {
+		    "$lib": [
+		        "./src/lib"
+		    ],
+		    "$lib/*": [
+		        "./src/lib/*"
+		    ],
+		    "$backend/*": [
+		        "../backend/*"
+		    ]
+		}
+	}
 }

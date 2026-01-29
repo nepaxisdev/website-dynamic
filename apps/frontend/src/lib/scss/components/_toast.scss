@@ -1,91 +1,141 @@
-@use "../base/helpers/type-helper" as *;
-@use "../base/helpers/spacing-helper" as *;
-@use "../abstracts/variables" as *;
+@use '../base/helpers/type-helper' as *;
+	@use '../base/helpers/spacing-helper' as *;
+	@use '../abstracts/variables' as *;
 
-[class*="toast--"] {
-	background-color: var(--set-body-background-color);
-	width: fit-content;
-	max-width: min(95vw, 25rem);
-	border: 1px solid hsl(0 0% 10% / 100%);
-	border-radius: 0.625rem;
-	padding: 0.5em;
-	display: none;
-	gap: 1rem;
-}
 
-.toast {
-	&-icon {
-		width: 2rem;
-		img {
-			width: 100%;
-			height: 100%;
-			object-fit: contain;
+
+	dialog {
+		outline: none;
+		border: none;
+		position: fixed;
+		inset-inline-start: 50%;
+		inset-block-start: 50%;
+		translate: -50% -50%;
+		margin: 0;
+	}
+	dialog::backdrop {
+		background: rgba(0, 0, 0, 0.3);
+	}
+	dialog[open] {
+		animation: zoom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+	}
+
+	@keyframes zoom {
+		from {
+			transform: scale(0.95);
+		}
+		to {
+			transform: scale(1);
 		}
 	}
-	&__container {
-		pointer-events: none;
-		position: fixed;
-		top: 0;
-		right: 0;
-		padding: 3rem 1rem;
-		z-index: 9999;
-		display: grid;
-		gap: 0.5rem;
+	dialog[open]::backdrop {
+		animation: fade 0.2s ease-out;
 	}
-	&-body {
-		background: var(--clr-neutral-700);
-		border: 1px solid var(--clr-neutral-600);
-		padding: 0.8rem 1rem;
-		border-radius: 0.25rem;
-		transition: opacity 0.15s, transform 0.15s;
-		cursor: pointer;
+	@keyframes fade {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
 	}
-	&.fade-out {
-		opacity: 0;
-		transform: translateY(-5px);
+
+	[class*='toast--'] {
+		background-color: var(--set-body-background-color);
+		width: fit-content;
+		max-width: min(95vw, 25rem);
+		border: 1px solid hsl(0 0% 10% / 100%);
+		border-radius: 0.625rem;
+		padding: 0.5em;
+		display: none;
+		gap: 1rem;
 	}
-}
-.modal {
-	position: fixed;
-	inset: 0;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	z-index: 9999;
-	&__overlay {
+
+	.toast {
+		&-icon {
+			width: 2rem;
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: contain;
+			}
+		}
+		&__container {
+			pointer-events: none;
+			position: fixed;
+			top: 0;
+			right: 0;
+			padding: 3rem 1rem;
+			z-index: 9999;
+			display: grid;
+			gap: 0.5rem;
+		}
+		&-body {
+			background: var(--clr-neutral-700);
+			border: 1px solid var(--clr-neutral-600);
+			padding: 0.8rem 1rem;
+			border-radius: 0.25rem;
+			transition:
+				opacity 0.15s,
+				transform 0.15s;
+			cursor: pointer;
+		}
+		&.fade-out {
+			opacity: 0;
+			transform: translateY(-5px);
+		}
+	}
+	.modal {
 		position: fixed;
 		inset: 0;
-		block-size: 100%;
-		inline-size: 100%;
-		background-color: hsl(from var(--clr-neutral-700) h s l / 10%);
-		backdrop-filter: blur(1rem);
-		z-index: -1;
-		opacity: 1;
-		translate: 0;
-		transition: opacity 0.3s linear;
-	}
-	&__dialog {
-		background: var(--clr-neutral-700);
-		border: 1px solid var(--clr-neutral-600);
-		padding: 2rem;
-		border-radius: 0.25rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		z-index: 9999;
-		min-inline-size: min(100%, 20rem);
-		max-inline-size: min(100%, 30rem);
-		overflow: clip;
+		&__overlay {
+			position: fixed;
+			inset: 0;
+			block-size: 100%;
+			inline-size: 100%;
+			background-color: hsl(from var(--clr-neutral-700) h s l / 10%);
+			backdrop-filter: blur(1rem);
+			z-index: -1;
+			opacity: 1;
+			translate: 0;
+			transition: opacity 0.3s linear;
+		}
+		&__dialog {
+			background: var(--clr-neutral-700);
+			border: 1px solid var(--clr-neutral-600);
+			padding: 2rem;
+			border-radius: 0.25rem;
+			z-index: 9999;
+			min-inline-size: min(100%, 30rem);
+			max-inline-size: min(100%, 50rem);
+			overflow: clip;
+		}
+		&__close{
+			position: absolute;
+			inset-inline-end: 1rem;
+			inset-block-start: 1rem;
+			svg{
+				inline-size:  1rem;
+				aspect-ratio: 1;
+			}
+		}
+		&__body {
+			margin-block-end: 1rem;
+		}
+		&__header {
+			@extend .mb-2;
+			color: var(--clr-neutral-100);
+		}
+		&__title {
+			@extend .heading-6;
+			font-family: $code-font-stack;
+			text-transform: uppercase;
+		}
+		&__content {
+			color: var(--clr-neutral-400);
+		}
 	}
-	&__body {
-		margin-block-end: 1rem;
-	}
-	&__header {
-		@extend .mb-2;
-	}
-	&__title {
-		@extend .heading-6;
-		font-family: $code-font-stack;
-		text-transform: uppercase;
-	}
-	&__content {
-		color: var(--clr-neutral-400);
-	}
-}

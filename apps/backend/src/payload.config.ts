@@ -4,7 +4,7 @@ import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
-
+import { seoPlugin } from '@payloadcms/plugin-seo';
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Categories } from './collections/BlogCategory'
@@ -32,5 +32,14 @@ export default buildConfig({
     },
   }),
   sharp,
-  plugins: [],
+  plugins: [
+    seoPlugin({
+      collections: [
+        'Media',
+      ],
+      uploadsCollection: 'media',
+      generateTitle: ({ doc }) => `${doc.title} | Nepaxis`,
+      generateDescription: ({ doc }) => doc.excerpt
+    })
+  ],
 })
