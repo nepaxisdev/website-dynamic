@@ -10,7 +10,6 @@ export const POST: RequestHandler = async ({ request }) => {
 	const MAILCHIMP_API_KEY = env.MAILCHIMP_API_KEY;
 	const AUDIENCE_ID = env.AUDIENCE_KEY;
 
-	console.log(AUDIENCE_ID, MAILCHIMP_API_KEY);
 	// Validate environment variables
 	if (!MAILCHIMP_API_KEY || !AUDIENCE_ID) {
 		console.error('Missing Mailchimp credentials');
