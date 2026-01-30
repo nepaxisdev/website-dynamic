@@ -1,11 +1,16 @@
 <script lang="ts">
+	import Modal from '$lib/components/Modal/Modal.svelte';
+	let showModal = $state(false);
+	let showErrorInModal = $state(false);
+
 	let email = $state('');
 	let loading = $state(false);
-	let message = $state('');
-
+	const modal = {
+		headerText: '',
+		contentText: ''
+	};
 	async function handleSubscribe() {
 		loading = true;
-		message = '';
 
 		try {
 			const res = await fetch('/api/subscribe', {
@@ -17,15 +22,28 @@
 			});
 
 			const data = await res.json();
-
 			if (res.ok) {
-				message = 'Successfully subscribed!';
-				email = ''; // Clear input
+				modal.headerText = email;
+				modal.contentText = `Successfully subscribed to Nepaxis' Newsletter!`;
+				email = '';
+				showErrorInModal = false;
+				showModal = true;
 			} else {
-				message = data.message || 'Failed to subscribe';
+				if (data.title === 'Member Exists') {
+					modal.headerText = 'You already are subscribed.';
+					modal.contentText = `${email} is already subscribed to our newsletter.`;
+				}
+				modal.headerText = data.title || 'Failed to subscribe';
+				modal.contentText = data.detail || 'This email might not work.';
+				showErrorInModal = false;
+				showModal = true;
 			}
 		} catch (err) {
-			message = 'Network error. Please try again.';
+			modal.headerText = 'Something went wrong.';
+			modal.contentText = '';
+			console.error(err);
+			showErrorInModal = true;
+			showModal = true;
 		} finally {
 			loading = false;
 		}
@@ -67,8 +85,24 @@
 				>
 			</span>
 		</button>
-		{#if message}
-			<p>{message}</p>
-		{/if}
 	</div>
 </form>
+
+{#if showModal}
+	<Modal bind:showModal>
+		{#snippet header()}
+			{modal.headerText}
+		{/snippet}
+		{#snippet content()}
+			{modal.contentText}
+			{#if showErrorInModal}
+				<div class="mt-1">
+					If it persists after some time, please email us at: <a
+						class="link"
+						href="mailto:support@nepaxis.com">support@nepaxis.com</a
+					>
+				</div>
+			{/if}
+		{/snippet}
+	</Modal>
+{/if}
