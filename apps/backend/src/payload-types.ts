@@ -537,6 +537,7 @@ export interface SiteSetting {
   basic_settings: {
     name: string;
     tagline: string;
+    cta_tagline: string;
     description: string;
     contact: {
       address: {
@@ -590,6 +591,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
     | {
         name?: T;
         tagline?: T;
+        cta_tagline?: T;
         description?: T;
         contact?:
           | T

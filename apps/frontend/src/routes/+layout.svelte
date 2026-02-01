@@ -10,14 +10,32 @@
 	import { afterNavigate, beforeNavigate } from '$app/navigation';
 
 	import { initAnimations } from '$lib/js/animations';
-	import { setContext } from 'svelte';
+	import { onMount, setContext, type Snippet } from 'svelte';
 	import Footer from '$lib/components/Footer/Footer.svelte';
+	import type { SiteSetting } from '$backend/src/payload-types';
 	gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
-	let { children } = $props();
+	interface Props {
+		children: Snippet;
+		data: {
+			siteSettings: SiteSetting;
+		};
+	}
+	let { data, children }: Props = $props();
+
+	setContext('site-settings', {
+		get settings() {
+			return data.siteSettings;
+		}
+	});
 
 	let showLoader = $state(true);
-
+	let smooth = $state<ScrollSmoother>();
+	setContext('smooth', {
+		get smooth() {
+			return smooth;
+		}
+	});
 	beforeNavigate(() => {
 		showLoader = true;
 	});
@@ -25,19 +43,17 @@
 		showLoader = false;
 	});
 
+	onMount(() => {
+		smooth = ScrollSmoother.create({
+			smooth: 1,
+			effects: true,
+			smoothTouch: 0
+		});
+	});
+
 	$effect(() => {
 		showLoader = false;
-
 		initAnimations();
-
-		if (window.outerWidth > 991) {
-			const smooth = ScrollSmoother.create({
-				smooth: 1,
-				effects: true,
-				smoothTouch: 0
-			});
-			setContext('smooth', smooth);
-		}
 
 		requestAnimationFrame(() => {
 			ScrollTrigger.refresh();

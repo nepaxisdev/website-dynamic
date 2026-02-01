@@ -10,6 +10,7 @@
 	import { initApproachSectionAnimations } from '$lib/js/animations/scroll-timelines/approach';
 	import { initDraggable } from '$lib/js/animations/draggable';
 	import Link from '$lib/components/Link/Link.svelte';
+	import SEO from '$lib/components/SEO/SEO.svelte';
 	$effect(() => {
 		initFloatingImages();
 		document.fonts.ready.then(() => {
@@ -21,6 +22,8 @@
 		});
 	});
 </script>
+
+<SEO pageSettings={{}} />
 
 <section
 	class="hero__section full-width content-grid"
@@ -559,7 +562,7 @@
 	</div>
 </section>
 <section
-	class="approach__section my-8 mt-md-8 mt-xl-9"
+	class="approach__section py-8 pt-md-8 pt-xl-9 pb-xl-10"
 	data-section="dark"
 	id="approach-section"
 	aria-labelledby="#approach-title"
@@ -637,7 +640,7 @@
 		</ul>
 	</div>
 </section>
-<section class="full-width mb-0 mb-3xl-4 mb-3xl-9 mt-md-6 mt-xl-9 fs-image" data-section="light">
+<section class="full-width mb-0 mb-3xl-4 mb-3xl-9 fs-image" data-section="light">
 	<picture>
 		<img src="/images/bottom-image.png" class="h-full object-cover w-100" alt="Our Work Images" />
 	</picture>

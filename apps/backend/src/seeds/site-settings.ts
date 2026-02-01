@@ -78,6 +78,7 @@ const seedSiteSettings = async () => {
 				basic_settings: {
 					name: 'Nepaxis Technologies llc',
 					tagline: 'Empowering your digital journey.',
+					cta_tagline: "Start your digital transformation us!",
 					contact: {
 						address: {
 							address_line_1: 'RAG Global Business Hub ',

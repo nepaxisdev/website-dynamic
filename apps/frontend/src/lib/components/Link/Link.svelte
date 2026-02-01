@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { gsap } from 'gsap';
 	import { ScrollTrigger } from 'gsap/ScrollTrigger';
-	import { ScrollSmoother } from 'gsap/ScrollSmoother';
+	import { ScrollSmoother as SSM } from 'gsap/ScrollSmoother';
+	import type { ScrollSmoother } from 'gsap/ScrollSmoother';
 	import { getContext } from 'svelte';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
@@ -14,9 +15,11 @@
 		scrollTo = undefined,
 		...restProps
 	} = $props();
-	gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+	gsap.registerPlugin(ScrollTrigger, SSM);
 
-	const smooth: ScrollSmoother = getContext('smooth');
+	type SmoothType = { smooth: ScrollSmoother | null };
+
+	const smoothInstance = $derived<ScrollSmoother | null>(getContext<SmoothType>('smooth').smooth);
 
 	let pathName = $derived(page.url.pathname);
 
@@ -25,7 +28,7 @@
 		if (onClick) {
 			onClick();
 		}
-		if (scrollTo && smooth) {
+		if (scrollTo && smoothInstance) {
 			if (!href) {
 				console.log(href);
 				return;
@@ -36,10 +39,10 @@
 
 			if (linkAddress) {
 				if (linkPath === '') {
-					smooth.scrollTo(linkAddress.toString(), true, 'top 100px');
+					smoothInstance.scrollTo(linkAddress.toString(), true, 'top 100px');
 				} else {
 					if (pathName === linkPath) {
-						smooth.scrollTo(linkHash, true, 'top 100px');
+						smoothInstance.scrollTo(linkHash, true, 'top 100px');
 					} else {
 						goto(linkAddress);
 					}
@@ -47,7 +50,7 @@
 			}
 		}
 
-		if (!smooth || !scrollTo) {
+		if (!smoothInstance || !scrollTo) {
 			goto(href);
 		}
 	}

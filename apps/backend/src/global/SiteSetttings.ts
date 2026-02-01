@@ -20,6 +20,14 @@ export const SiteSettings: GlobalConfig = {
               required: true,
               maxLength: 50,
             },
+            {
+              name: 'cta_tagline',
+              type: 'text',
+              required: true,
+              maxLength: 60,
+              label: "CTA Tagline",
+              defaultValue: ""
+            },
 
             {
               name: 'description',
