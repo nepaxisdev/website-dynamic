@@ -1,29 +1,43 @@
-import { CollectionConfig } from 'payload'
+import type { CollectionConfig } from 'payload'
 
-export const Pages: CollectionConfig = {
-  slug: 'pages',
+export const SEOPages: CollectionConfig = {
+  slug: 'seo-pages',
   admin: {
-    useAsTitle: 'title',
+    useAsTitle: 'page_description',
+    defaultColumns: ['page_description', 'slug', 'status', 'updatedAt'],
+    group: 'Content',
   },
   fields: [
     {
-      name: 'title',
+      name: 'page_title',
       type: 'text',
       required: true,
+      label: 'Page Title',
     },
     {
-      name: 'slug',
+      name: 'page_description',
       type: 'text',
       required: true,
-      unique: true,
-      admin: {
-        description: 'URL path for this page (e.g., "about", "contact")',
-      },
+      label: 'Page Description',
+
     },
     {
-      name: 'content',
-      type: 'richText',
+      name: 'page_keywords',
+      type: "text",
+      required: true,
+      label: 'Keywords',
     },
-    // SEO fields added by plugin
-  ],
+    {
+      name: 'default_og_image',
+      type: "text",
+      required: true,
+      label: 'Keywords',
+    },
+    {
+      name: 'og_image',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'OG Image',
+    },
+  ]
 }

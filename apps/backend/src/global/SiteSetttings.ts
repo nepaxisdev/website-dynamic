@@ -110,16 +110,8 @@ export const SiteSettings: GlobalConfig = {
             },
             {
               name: 'default_keywords',
-              type: 'array',
+              type: 'text',
               required: true,
-              fields: [
-                {
-                  name: 'keyword',
-                  type: 'text',
-                  maxLength: 40,
-                  required: false,
-                },
-              ],
             },
             {
               name: 'default_og_image',
@@ -132,7 +124,11 @@ export const SiteSettings: GlobalConfig = {
               name: 'analytics',
               fields: [
                 {
-                  name: 'google_analytics_key',
+                  name: 'google_tags_scripts',
+                  type: 'text',
+                },
+                {
+                  name: 'google_tags_key',
                   type: 'text',
                   maxLength: 40,
                 },

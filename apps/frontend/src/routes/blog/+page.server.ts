@@ -1,5 +1,5 @@
 import type { PageServerLoad } from './$types';
-import { getPayloadClient } from '$lib/payload';
+import { getPayloadClient } from '$lib/server/payload';
 import config from '$lib/config';
 
 const SERVER_SORT_CODES = [
@@ -48,13 +48,13 @@ export const load: PageServerLoad = async ({ url }) => {
 			// 2. Search Query Filter (Title OR Tags)
 			...(query
 				? [
-						{
-							or: [
-								{ title: { contains: query } },
-								{ 'tags.tag': { contains: query } } // Note: your schema field is 'tag' inside 'tags'
-							]
-						}
-					]
+					{
+						or: [
+							{ title: { contains: query } },
+							{ 'tags.tag': { contains: query } } // Note: your schema field is 'tag' inside 'tags'
+						]
+					}
+				]
 				: [])
 		]
 	};

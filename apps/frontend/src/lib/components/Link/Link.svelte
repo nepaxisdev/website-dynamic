@@ -10,9 +10,9 @@
 	const {
 		class: className,
 		href,
-		children,
 		onClick = undefined,
 		scrollTo = undefined,
+		children,
 		...restProps
 	} = $props();
 	gsap.registerPlugin(ScrollTrigger, SSM);

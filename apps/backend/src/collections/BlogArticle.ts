@@ -3,6 +3,7 @@ import type { CollectionConfig } from 'payload'
 import { slugField } from 'payload'
 export const Articles: CollectionConfig = {
   slug: 'articles',
+
   versions: {
     drafts: {
       autosave: {

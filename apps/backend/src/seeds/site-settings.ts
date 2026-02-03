@@ -79,6 +79,7 @@ const seedSiteSettings = async () => {
 					name: 'Nepaxis Technologies llc',
 					tagline: 'Empowering your digital journey.',
 					cta_tagline: "Start your digital transformation us!",
+					description: "Empowering your digital journey.",
 					contact: {
 						address: {
 							address_line_1: 'RAG Global Business Hub ',
@@ -96,21 +97,16 @@ const seedSiteSettings = async () => {
 					site_name: 'Nepaxis',
 					title_suffix: ' | Nepaxis',
 					default_title: 'Nepaxis Technologies llc | Empowering your digital journey',
-					default_keywords: [
-						{ keyword: 'Nepaxis' },
-						{ keyword: 'Nepal' },
-						{ keyword: 'Dubai' },
-					],
+					default_keywords: "IT Company of Dubai and Nepal",
 					default_og_image: ogImageId, // Required field
-
 				},
 				// Tab: social_media
 				social_media: {
-					facebook: 'https://facebook.com/example',
-					instagram: 'https://instagram.com/example',
-					linkedin: 'https://linkedin.com/company/example',
-					x: 'https://x.com/example',
-					whatsapp: 'https://wa.me/1234567890',
+					facebook: 'https://www.facebook.com/profile.php?id=61583287982556',
+					instagram: 'https://www.instagram.com/nepaxis',
+					linkedin: 'https://www.linkedin.com/company/nepaxis/',
+					x: 'https://x.com/nepaxis',
+					whatsapp: 'https://wa.me/971561448979',
 				}
 			},
 		})

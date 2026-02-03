@@ -1,5 +1,5 @@
 import type { LayoutServerLoad } from './$types';
-import { getPayloadClient } from '$lib/payload';
+import { getPayloadClient } from '$lib/server/payload';
 
 export const load: LayoutServerLoad = async ({ }) => {
 

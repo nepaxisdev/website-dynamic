@@ -1,12 +1,12 @@
 services:
   frontend:
+    user: "${UID:-1000}:${GID:-1000}"
     build:
       context: .
       dockerfile: ./apps/frontend/Dockerfile
     ports:
       - "5173:5173"
-    env_file: .env
-    # Mount source code for HMR (Hot Module Reload)
+    env_file: .env.docker
     volumes:
       - ./apps/frontend:/app/apps/frontend
       - /app/node_modules
@@ -18,18 +18,17 @@ services:
       - NODE_ENV=development
 
   backend:
+    user: "${UID:-1000}:${GID:-1000}"
     build:
       context: .
       dockerfile: ./apps/backend/Dockerfile
     ports:
       - "3000:3000"
-    env_file: .env
-    # Mount source code for HMR (Hot Module Reload)
+    env_file: .env.docker
     volumes:
       - ./apps/backend:/app/apps/backend
       - /app/node_modules
       - /app/apps/backend/node_modules
-      # Don't mount .next directory (generated files)
       - /app/apps/backend/.next
     depends_on:
       postgres:
@@ -40,10 +39,7 @@ services:
   postgres:
     image: postgres:15-alpine
     restart: always
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER:-nepaxis_user}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nepaxis_password}
-      POSTGRES_DB: ${POSTGRES_DB:-nepaxis}
+    env_file: .env.docker
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:

@@ -13,6 +13,9 @@ const config = {
 		adapter: adapter(),
 		alias: {
 			$backend: path.resolve("../backend")
+		},
+		env: {
+			dir: "../.."
 		}
 	},
 	extensions: ['.svelte', '.svx']

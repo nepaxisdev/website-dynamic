@@ -5,12 +5,23 @@
 		SerializedParagraphNode,
 		SerializedHeadingNode,
 		SerializedTextNode,
-		SerializedLinkNode
+		SerializedLinkNode,
+		SerializedQuoteNode,
+		SerializedListNode,
+		SerializedListItemNode,
+		SerializedHorizontalRuleNode,
+		SerializedTableNode,
+		SerializedTableCellNode,
+		SerializedTableRowNode
 	} from '@payloadcms/richtext-lexical';
-	import type {
-		SerializedEditorState,
-		SerializedLexicalNode
+
+	import {
+		isInlineDomNode,
+		type SerializedEditorState,
+		type SerializedLexicalNode
 	} from '@payloadcms/richtext-lexical/lexical';
+
+	import RichText from './RichText.svelte';
 	import { onDestroy, onMount } from 'svelte';
 
 	interface Props {
@@ -39,6 +50,13 @@
 		| SerializedHeadingNode
 		| SerializedTextNode
 		| SerializedLinkNode
+		| SerializedQuoteNode
+		| SerializedListNode
+		| SerializedListItemNode
+		| SerializedHorizontalRuleNode
+		| SerializedTableNode
+		| SerializedTableCellNode
+		| SerializedTableRowNode
 		| UploadNode
 		| SerializedLexicalNode;
 
@@ -60,6 +78,12 @@
 
 	function hasImageChild(node: SerializedParagraphNode): boolean {
 		return node.children?.some((child) => child.type === 'upload') || false;
+	}
+	function hasListChild(node: SerializedParagraphNode): boolean {
+		return node.children?.some((child) => child.type === 'list') || false;
+	}
+	function hasListItemChild(node: SerializedListNode): boolean {
+		return node.children?.some((child) => child.type === 'listitem') || false;
 	}
 
 	function formatText(node: SerializedTextNode) {
@@ -99,7 +123,31 @@
 		return node.type === 'linebreak';
 	}
 
+	// function isBlockQuoteNode(node: PayloadLexicalNode): node is SerializedQuoteNode {
+	// 	return node.type === 'blockquote';
+	// }
+	function isListNode(node: PayloadLexicalNode): node is SerializedListNode {
+		return node.type === 'list';
+	}
+	function isListItemNode(node: PayloadLexicalNode): node is SerializedListItemNode {
+		return node.type === 'listitem';
+	}
+	function isHorizontalRuleNode(node: PayloadLexicalNode): node is SerializedHorizontalRuleNode {
+		return node.type === 'horizontalrule';
+	}
+	function isTableNode(node: PayloadLexicalNode): node is SerializedTableNode {
+		return node.type === 'table';
+	}
+	function isTableCellNode(node: PayloadLexicalNode): node is SerializedTableCellNode {
+		return node.type === 'tablecell';
+	}
+	function isTableRowNode(node: PayloadLexicalNode): node is SerializedTableRowNode {
+		return node.type === 'tablerow';
+	}
+
 	const nodes = $derived((content?.root?.children as PayloadLexicalNode[]) || []);
+
+	$inspect(content);
 
 	onMount(() => {
 		if (afterRun) {
@@ -114,6 +162,24 @@
 </script>
 
 {#each nodes as node}
+	{#if isTextNode(node)}
+		{@const formatted = formatText(node)}
+		{#if formatted.isBold && formatted.isItalic}
+			<strong><em>{node.text}</em></strong>
+		{:else if formatted.isBold}
+			<strong>{node.text}</strong>
+		{:else if formatted.isItalic}
+			<em>{node.text}</em>
+		{:else if formatted.isCode}
+			<code class="content-code">{node.text}</code>
+		{:else if formatted.isStrikethrough}
+			<s>{node.text}</s>
+		{:else if formatted.isUnderline}
+			<u>{node.text}</u>
+		{:else}
+			{node.text}
+		{/if}
+	{/if}
 	{#if isHeadingNode(node)}
 		{@const depth = getHeadingDepth(node)}
 		{@const actualDepth = getActualDepth(depth)}
@@ -121,40 +187,10 @@
 
 		{#if actualDepth === 2}
 			<h2 class={className}>
-				{#each node.children || [] as child}
-					{#if isTextNode(child)}
-						{@const formatted = formatText(child)}
-						{#if formatted.isBold && formatted.isItalic}
-							<strong><em>{child.text}</em></strong>
-						{:else if formatted.isBold}
-							<strong>{child.text}</strong>
-						{:else if formatted.isItalic}
-							<em>{child.text}</em>
-						{:else if formatted.isCode}
-							<code>{child.text}</code>
-						{:else if formatted.isStrikethrough}
-							<s>{child.text}</s>
-						{:else if formatted.isUnderline}
-							<u>{child.text}</u>
-						{:else}
-							{child.text}
-						{/if}
-					{:else if isLinkNode(child)}
-						<a
-							href={child.fields?.url || '#'}
-							title={child.fields?.url || ''}
-							target="_blank"
-							class="content-element"
-							rel={child.fields?.newTab ? 'noopener noreferrer' : undefined}
-						>
-							{#each child.children || [] as linkChild}
-								{#if isTextNode(linkChild)}
-									{linkChild.text}
-								{/if}
-							{/each}
-						</a>
-					{/if}
-				{/each}
+				{#if node.children}
+					{@const inner: SerializedEditorState = {root: node}}
+					<RichText content={inner} />
+				{/if}
 			</h2>
 		{:else if actualDepth === 3}
 			<h3 class={className}>
@@ -181,7 +217,7 @@
 							href={child.fields?.url || '#'}
 							title={child.fields?.url || ''}
 							target="_blank"
-							class="content-element"
+							class="content-link"
 							rel={child.fields?.newTab ? 'noopener noreferrer' : undefined}
 						>
 							{#each child.children || [] as linkChild}
@@ -218,7 +254,7 @@
 							href={child.fields?.url || '#'}
 							title={child.fields?.url || ''}
 							target="_blank"
-							class="content-element"
+							class="content-link"
 							rel={child.fields?.newTab ? 'noopener noreferrer' : undefined}
 						>
 							{#each child.children || [] as linkChild}
@@ -255,7 +291,7 @@
 							href={child.fields?.url || '#'}
 							title={child.fields?.url || ''}
 							target="_blank"
-							class="content-element"
+							class="content-link"
 							rel={child.fields?.newTab ? 'noopener noreferrer' : undefined}
 						>
 							{#each child.children || [] as linkChild}
@@ -292,7 +328,7 @@
 							href={child.fields?.url || '#'}
 							title={child.fields?.url || ''}
 							target="_blank"
-							class="content-element"
+							class="content-link"
 							rel={child.fields?.newTab ? 'noopener noreferrer' : undefined}
 						>
 							{#each child.children || [] as linkChild}
@@ -308,7 +344,7 @@
 	{:else if isParagraphNode(node)}
 		{@const hasImage = hasImageChild(node)}
 
-		<p class={hasImage ? 'content-image' : ''}>
+		<p class={hasImage ? 'content-image' : 'content-element'}>
 			{#each node.children || [] as child}
 				{#if isTextNode(child)}
 					{@const formatted = formatText(child)}
@@ -319,7 +355,7 @@
 					{:else if formatted.isItalic}
 						<em>{child.text}</em>
 					{:else if formatted.isCode}
-						<code>{child.text}</code>
+						<code class="content-code">{child.text}</code>
 					{:else if formatted.isStrikethrough}
 						<s>{child.text}</s>
 					{:else if formatted.isUnderline}
@@ -332,7 +368,7 @@
 						href={child.fields?.url || '#'}
 						title={child.fields?.url || ''}
 						target="_blank"
-						class="content-element"
+						class="content-link"
 						rel={child.fields?.newTab ? 'noopener noreferrer' : undefined}
 					>
 						{#each child.children || [] as linkChild}
@@ -346,7 +382,7 @@
 						src={getImageSrc(child.value?.url || '')}
 						alt={child.value?.alt || ''}
 						width={child.value?.width}
-						class="content-element"
+						class="content-image"
 					/>
 				{:else if isLineBreakNode(child)}
 					<br />
@@ -358,7 +394,39 @@
 			src={getImageSrc(node.value?.url || '')}
 			alt={node.value?.alt || ''}
 			width={node.value?.width}
-			class="content-element"
+			class="content-image"
 		/>
+	{:else if isHorizontalRuleNode(node)}
+		<hr class="content-hr" />
+	{:else if isTableNode(node)}
+		<table class="content-table">
+			{#if node.children}
+				{@const inner: SerializedEditorState = {root: node}}
+				<RichText content={inner} />
+			{/if}
+		</table>
+	{:else if isListNode(node)}
+		{#if node.tag === 'ol'}
+			<ol class="content-list">
+				{#if node.children}
+					{@const inner: SerializedEditorState = {root: node}}
+					<RichText content={inner} />
+				{/if}
+			</ol>
+		{:else}
+			<ul class="content-list">
+				{#if node.children}
+					{@const inner: SerializedEditorState = {root: node}}
+					<RichText content={inner} />
+				{/if}
+			</ul>
+		{/if}
+	{:else if isListItemNode(node)}
+		<li class="content-list-item">
+			{#if node.children}
+				{@const inner: SerializedEditorState = {root: node}}
+				<RichText content={inner} />
+			{/if}
+		</li>
 	{/if}
 {/each}

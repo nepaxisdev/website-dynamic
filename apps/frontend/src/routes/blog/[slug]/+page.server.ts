@@ -1,4 +1,4 @@
-import { getPayloadClient } from '$lib/payload';
+import { getPayloadClient } from '$lib/server/payload';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {

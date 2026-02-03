@@ -1,5 +1,5 @@
 import config from '$lib/config';
-import { getPayloadClient } from '$lib/payload.js';
+import { getPayloadClient } from '$lib/server/payload.js';
 
 const SERVER_SORT_CODES = [
 	{
@@ -45,13 +45,13 @@ export const GET = async ({ url }) => {
 			// 2. Search Query Filter (Title OR Tags)
 			...(query
 				? [
-						{
-							or: [
-								{ title: { contains: query } },
-								{ 'tags.tag': { contains: query } } // Note: your schema field is 'tag' inside 'tags'
-							]
-						}
-					]
+					{
+						or: [
+							{ title: { contains: query } },
+							{ 'tags.tag': { contains: query } } // Note: your schema field is 'tag' inside 'tags'
+						]
+					}
+				]
 				: [])
 		]
 	};

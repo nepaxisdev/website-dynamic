@@ -15,5 +15,8 @@
     "@payloadcms/plugin-seo": "^3.72.0",
     "@payloadcms/richtext-lexical": "^3.72.0",
     "payload": "^3.72.0"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3"
   }
 }

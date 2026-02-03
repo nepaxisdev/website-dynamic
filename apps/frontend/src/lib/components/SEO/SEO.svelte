@@ -8,11 +8,19 @@
 	const siteSettings = getContext<{ settings: SiteSetting }>('site-settings')
 		.settings as SiteSetting;
 
+	$inspect(siteSettings);
+
 	const globalSEO = $derived(siteSettings.page_seo);
 	const pageURL = $derived(page.url.href);
 	const homepageURL = $derived(page.url.origin);
+	const analytics = $derived(globalSEO?.analytics);
 
 	const basicSettings = $derived(siteSettings.basic_settings);
+
+	const gtmScript = $derived(`<script>window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("js", new Date());
+    gtag("config", "${analytics?.google_tags_key}");<\/script>`);
 
 	const title = $derived.by(() => {
 		if (pageSettings && pageSettings.page_title) {
@@ -112,5 +120,20 @@
 	<meta name="twitter:url" content={pageURL} />
 	{#if !preventIndexing}
 		<meta name="robots" content="noindex, follow" />
+	{/if}
+
+	{#if analytics?.google_tags_key}
+		<script
+			async
+			src={`https://www.googletagmanager.com/gtag/js?id=${analytics.google_tags_key}`}
+		></script>
+		{@html gtmScript}
+	{/if}
+	{#if analytics?.ahref_id}
+		<script
+			src="https://analytics.ahrefs.com/analytics.js"
+			data-key={analytics.ahref_id}
+			async
+		></script>
 	{/if}
 </svelte:head>

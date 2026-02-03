@@ -24,7 +24,7 @@
 			grid-column: content-start / breakout-end;
 			margin-block-end: 1rem;
 		}
-		& li > ul {
+		& li > ul, & li > ol {
 			margin-inline-start: 1.5rem;
 		}
 
@@ -42,17 +42,24 @@
 			color: var(--clr-neutral-100);
 		}
 	}
+	&__image{
+		object-fit: cover;
+	}
 }
 
 .content {
 	&-image {
 		grid-column: breakout-start / breakout-end;
-
+		background-color: var(--clr-dark-500);
+		border-radius: 2rem;
+		
 		img {
 			inline-size: 100%;
-			background-color: white;
+			background-color: var(--clr-dark-500);
 			border-radius: 2rem;
 		}
+
+
 	}
 	&-element {
 		letter-spacing: 0.02em;
@@ -143,6 +150,7 @@
 				font-family: 'Space Mono', monospace;
 			}
 			margin-block: 0.35em;
+			
 		}
 	}
 }

@@ -557,13 +557,11 @@ export interface SiteSetting {
     site_name?: string | null;
     title_suffix?: string | null;
     default_title?: string | null;
-    default_keywords: {
-      keyword?: string | null;
-      id?: string | null;
-    }[];
+    default_keywords: string;
     default_og_image: number | Media;
     analytics?: {
-      google_analytics_key?: string | null;
+      google_tags_scripts?: string | null;
+      google_tags_key?: string | null;
       ahref_id?: string | null;
     };
   };
@@ -617,17 +615,13 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         site_name?: T;
         title_suffix?: T;
         default_title?: T;
-        default_keywords?:
-          | T
-          | {
-              keyword?: T;
-              id?: T;
-            };
+        default_keywords?: T;
         default_og_image?: T;
         analytics?:
           | T
           | {
-              google_analytics_key?: T;
+              google_tags_scripts?: T;
+              google_tags_key?: T;
               ahref_id?: T;
             };
       };

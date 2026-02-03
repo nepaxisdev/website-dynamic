@@ -839,6 +839,24 @@
           "primaryKey": false,
           "notNull": false
         },
+        "meta_title": {
+          "name": "meta_title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "meta_description": {
+          "name": "meta_description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "meta_image_id": {
+          "name": "meta_image_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp(3) with time zone",
@@ -898,6 +916,21 @@
           "columns": [
             {
               "expression": "cover_image_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "articles_meta_meta_image_idx": {
+          "name": "articles_meta_meta_image_idx",
+          "columns": [
+            {
+              "expression": "meta_image_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -974,6 +1007,19 @@
           "tableTo": "media",
           "columnsFrom": [
             "cover_image_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "articles_meta_image_id_media_id_fk": {
+          "name": "articles_meta_image_id_media_id_fk",
+          "tableFrom": "articles",
+          "tableTo": "media",
+          "columnsFrom": [
+            "meta_image_id"
           ],
           "columnsTo": [
             "id"
@@ -1135,6 +1181,24 @@
           "primaryKey": false,
           "notNull": false
         },
+        "version_meta_title": {
+          "name": "version_meta_title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_meta_description": {
+          "name": "version_meta_description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_meta_image_id": {
+          "name": "version_meta_image_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
         "version_updated_at": {
           "name": "version_updated_at",
           "type": "timestamp(3) with time zone",
@@ -1233,6 +1297,21 @@
           "columns": [
             {
               "expression": "version_cover_image_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "_articles_v_version_meta_version_meta_image_idx": {
+          "name": "_articles_v_version_meta_version_meta_image_idx",
+          "columns": [
+            {
+              "expression": "version_meta_image_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -1382,6 +1461,19 @@
           "tableTo": "media",
           "columnsFrom": [
             "version_cover_image_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "_articles_v_version_meta_image_id_media_id_fk": {
+          "name": "_articles_v_version_meta_image_id_media_id_fk",
+          "tableFrom": "_articles_v",
+          "tableTo": "media",
+          "columnsFrom": [
+            "version_meta_image_id"
           ],
           "columnsTo": [
             "id"
@@ -2058,6 +2150,248 @@
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
+    },
+    "public.site_settings": {
+      "name": "site_settings",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "basic_settings_name": {
+          "name": "basic_settings_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "basic_settings_tagline": {
+          "name": "basic_settings_tagline",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "basic_settings_cta_tagline": {
+          "name": "basic_settings_cta_tagline",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "basic_settings_description": {
+          "name": "basic_settings_description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "basic_settings_contact_address_address_line_1": {
+          "name": "basic_settings_contact_address_address_line_1",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "basic_settings_contact_address_address_line_2": {
+          "name": "basic_settings_contact_address_address_line_2",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "basic_settings_contact_address_address_line_3": {
+          "name": "basic_settings_contact_address_address_line_3",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "basic_settings_contact_address_map_link": {
+          "name": "basic_settings_contact_address_map_link",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "basic_settings_contact_contact_email": {
+          "name": "basic_settings_contact_contact_email",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "basic_settings_contact_phone_number_1": {
+          "name": "basic_settings_contact_phone_number_1",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "basic_settings_contact_phone_number_2": {
+          "name": "basic_settings_contact_phone_number_2",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "basic_settings_contact_career_email": {
+          "name": "basic_settings_contact_career_email",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "basic_settings_contact_support_email": {
+          "name": "basic_settings_contact_support_email",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "page_seo_site_name": {
+          "name": "page_seo_site_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "page_seo_title_suffix": {
+          "name": "page_seo_title_suffix",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "page_seo_default_title": {
+          "name": "page_seo_default_title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "page_seo_default_keywords": {
+          "name": "page_seo_default_keywords",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "page_seo_default_og_image_id": {
+          "name": "page_seo_default_og_image_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "page_seo_analytics_google_tags_scripts": {
+          "name": "page_seo_analytics_google_tags_scripts",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "page_seo_analytics_google_tags_key": {
+          "name": "page_seo_analytics_google_tags_key",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "page_seo_analytics_ahref_id": {
+          "name": "page_seo_analytics_ahref_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "social_media_facebook": {
+          "name": "social_media_facebook",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "social_media_instagram": {
+          "name": "social_media_instagram",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "social_media_linkedin": {
+          "name": "social_media_linkedin",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "social_media_x": {
+          "name": "social_media_x",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "social_media_whatsapp": {
+          "name": "social_media_whatsapp",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "social_media_tiktok": {
+          "name": "social_media_tiktok",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "social_media_youtube": {
+          "name": "social_media_youtube",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "social_media_pinterest": {
+          "name": "social_media_pinterest",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "social_media_threads": {
+          "name": "social_media_threads",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "site_settings_page_seo_page_seo_default_og_image_idx": {
+          "name": "site_settings_page_seo_page_seo_default_og_image_idx",
+          "columns": [
+            {
+              "expression": "page_seo_default_og_image_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "site_settings_page_seo_default_og_image_id_media_id_fk": {
+          "name": "site_settings_page_seo_default_og_image_id_media_id_fk",
+          "tableFrom": "site_settings",
+          "tableTo": "media",
+          "columnsFrom": [
+            "page_seo_default_og_image_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     }
   },
   "enums": {
@@ -2088,6 +2422,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "73493a19-1b34-4bdf-8b30-0bae75392dd9",
+  "id": "5e955641-eb12-4e83-ba6e-b88c6965208c",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }
