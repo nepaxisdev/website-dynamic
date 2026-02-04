@@ -27,6 +27,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
+  ...(process.env.ENV_MODE === "prod" && { cors: [process.env.PUBLIC_CLIENT_URL ?? ""] }),
   collections: [Users, Media, Categories, Articles, SEOPages],
   globals: [SiteSettings],
   editor: lexicalEditor(),
@@ -38,6 +39,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.PRIVATE_DATABASE_URI!,
     },
+    push: process.env.ENV_MODE === "dev" ? true : false
   }),
   sharp,
   plugins: [

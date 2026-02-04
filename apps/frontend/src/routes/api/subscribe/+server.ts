@@ -1,14 +1,16 @@
 import { json, error } from '@sveltejs/kit';
-import { env } from '$env/dynamic/private';
 import type { RequestHandler } from './$types';
+import { PUBLIC_MAILCHIMP_API_KEY, PUBLIC_AUDIENCE_KEY } from "$env/static/public";
 
 interface SubscribeBody {
 	email: string;
 }
 
 export const POST: RequestHandler = async ({ request }) => {
-	const MAILCHIMP_API_KEY = env.MAILCHIMP_API_KEY;
-	const AUDIENCE_ID = env.AUDIENCE_KEY;
+
+	// These variables are loaded securely from Vercel's environment settings.
+	const MAILCHIMP_API_KEY = PUBLIC_MAILCHIMP_API_KEY!;
+	const AUDIENCE_ID = PUBLIC_AUDIENCE_KEY!;
 
 	// Validate environment variables
 	if (!MAILCHIMP_API_KEY || !AUDIENCE_ID) {

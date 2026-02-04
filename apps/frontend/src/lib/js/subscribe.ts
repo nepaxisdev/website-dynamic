@@ -1,9 +1,10 @@
 // api/subscribe.ts
 import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { PUBLIC_MAILCHIMP_API_KEY, PUBLIC_AUDIENCE_KEY } from "$env/static/public";
 
 // These variables are loaded securely from Vercel's environment settings.
-const MAILCHIMP_API_KEY = process.env.MAILCHIMP_API_KEY!;
-const AUDIENCE_ID = process.env.MAILCHIMP_AUDIENCE_ID!;
+const MAILCHIMP_API_KEY = PUBLIC_MAILCHIMP_API_KEY!;
+const AUDIENCE_ID = PUBLIC_AUDIENCE_KEY!;
 
 // The type for the request body you expect
 interface SubscribeBody {
