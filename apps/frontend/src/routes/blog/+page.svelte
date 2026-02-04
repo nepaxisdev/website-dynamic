@@ -7,6 +7,7 @@
 	import config from '$lib/config.js';
 	import { goto, replaceState } from '$app/navigation';
 	import Tag from '$lib/components/Tag/Tag.svelte';
+	import SEO from '$lib/components/SEO/SEO.svelte';
 	import { page } from '$app/state';
 	import type { Category } from '$backend/src/payload-types.js';
 
@@ -33,6 +34,7 @@
 
 	const page_data = $derived(data.articles);
 	const categories = $derived(data.categories);
+	const page_seo = $derived(data.page_seo);
 	let hasNextPage = $derived(page_data.hasNextPage);
 	let hasPrevPage = $derived(page_data.hasPrevPage);
 	let search_query = $derived(data.query);
@@ -102,6 +104,8 @@
 		});
 	});
 </script>
+
+<SEO pageSettings={page_seo} />
 
 <section class="blog__header-section mt-8 mb-3 mt-md-6 mt-lg-9">
 	<h1 class="heading-1">

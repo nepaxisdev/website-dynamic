@@ -17,6 +17,7 @@ import { Users } from './collections/Users';
 import { Media } from './collections/Media';
 import { Categories } from './collections/BlogCategory';
 import { Articles } from './collections/BlogArticle';
+import { SEOPages } from './collections/Pages';
 import { SiteSettings } from './global/SiteSetttings';
 
 export default buildConfig({
@@ -26,7 +27,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Categories, Articles],
+  collections: [Users, Media, Categories, Articles, SEOPages],
   globals: [SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PRIVATE_PAYLOAD_SECRET!,
@@ -41,11 +42,54 @@ export default buildConfig({
   sharp,
   plugins: [
     seoPlugin({
-      collections: ['articles', ''],
+      collections: ['articles', 'seo-pages'], // Add all collections here
       uploadsCollection: 'media',
-      generateTitle: ({ doc }) => `${doc.title} | Nepaxis`,
-      generateDescription: ({ doc }) => doc.short_quote,
-      generateImage: ({ doc }) => doc.cover_image,
+      generateTitle: ({ doc, collectionConfig }) => {
+        // Check which collection is being processed
+        if (collectionConfig?.slug === 'articles') {
+          return `${doc?.title || 'Untitled Article'} | Nepaxis`;
+        }
+        if (collectionConfig?.slug === 'seo-pages') {
+          return `${doc?.page_title || 'Untitled Page'} | Nepaxis`;
+        }
+        return 'Nepaxis';
+      },
+      generateDescription: ({ doc, collectionConfig }) => {
+        if (collectionConfig?.slug === 'articles') {
+          return doc?.short_quote || '';
+        }
+        if (collectionConfig?.slug === 'seo-pages') {
+          return doc?.page_description || '';
+        }
+        return '';
+      },
+      generateImage: ({ doc, collectionConfig }) => {
+        if (collectionConfig?.slug === 'articles') {
+          return doc?.cover_image || null;
+        }
+        if (collectionConfig?.slug === 'seo-pages') {
+          return doc?.og_image || null;
+        }
+        return null;
+      },
+      fields: ({ defaultFields }) => [
+        ...defaultFields,
+        {
+          name: 'keywords',
+          type: 'text',
+          label: 'Keywords',
+        },
+        {
+          name: 'prevent_indexing',
+          label: "Prevent Indexing",
+          type: "checkbox",
+          defaultValue: false,
+          required: true,
+          admin: {
+            position: 'sidebar'
+          }
+        },
+      ]
     }),
   ],
 });

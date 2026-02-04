@@ -12,6 +12,7 @@
 	import { ScrollTrigger } from 'gsap/ScrollTrigger';
 	import { browser } from '$app/environment';
 	import { onDestroy } from 'svelte';
+	import SEO from '$lib/components/SEO/SEO.svelte';
 
 	const { data }: { data: { article: Article; recommended_articles: Article[] } } = $props();
 	const mainData = $derived(data.article) as Article;
@@ -104,7 +105,14 @@
 	});
 </script>
 
-<!-- <Seo {media_url} siteSettings={{}} pageSettings={{}} /> -->
+<SEO
+	pageSettings={{
+		page_title: mainData.title,
+		page_description: mainData.short_quote,
+		og_image: mainData.cover_image,
+		meta: mainData.meta
+	}}
+/>
 <section class="article__section content-grid py-4 py-md-6 py-lg-9">
 	<div class="mb-5">
 		<a href="/blog" class="pretty-link" aria-label="Back to Articles">
@@ -203,15 +211,15 @@
 				</a>
 			</div>
 		</div>
-		<div class="additional__wrapper col-12 col-md-8 col-start-lg-6 col-end-lg-13 col-start-xl-5">
-			{#if recommendedArticles && recommendedArticles.length > 0}
+		{#if recommendedArticles && recommendedArticles.length > 0}
+			<div class="additional__wrapper col-12 col-md-8 col-start-lg-6 col-end-lg-13 col-start-xl-5">
 				<ul class="strip-style blog__articles-grid" aria-label="Additional Articles">
 					{#each recommendedArticles as article}
 						<ArticleCard {article} tag="li" />
 					{/each}
 				</ul>
-			{/if}
-		</div>
+			</div>
+		{/if}
 	</div>
 </section>
 

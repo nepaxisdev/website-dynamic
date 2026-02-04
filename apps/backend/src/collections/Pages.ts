@@ -1,11 +1,12 @@
 import type { CollectionConfig } from 'payload'
+import { slugField } from 'payload'
 
 export const SEOPages: CollectionConfig = {
   slug: 'seo-pages',
   admin: {
-    useAsTitle: 'page_description',
-    defaultColumns: ['page_description', 'slug', 'status', 'updatedAt'],
-    group: 'Content',
+    useAsTitle: 'page_title',
+    defaultColumns: ['page_title', 'page_description', 'slug', 'status', 'updatedAt'],
+    group: 'SEO',
   },
   fields: [
     {
@@ -14,25 +15,18 @@ export const SEOPages: CollectionConfig = {
       required: true,
       label: 'Page Title',
     },
+    slugField({
+      name: 'slug',
+      useAsSlug: 'page_title',
+    }),
     {
       name: 'page_description',
       type: 'text',
       required: true,
       label: 'Page Description',
+      maxLength: 150,
+    },
 
-    },
-    {
-      name: 'page_keywords',
-      type: "text",
-      required: true,
-      label: 'Keywords',
-    },
-    {
-      name: 'default_og_image',
-      type: "text",
-      required: true,
-      label: 'Keywords',
-    },
     {
       name: 'og_image',
       type: 'upload',

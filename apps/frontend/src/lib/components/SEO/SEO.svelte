@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { PUBLIC_API_URL as media_url } from '$env/static/public';
+	import { PUBLIC_API_URL as media_url, PUBLIC_CLIENT_URL as main_url } from '$env/static/public';
 	import { page } from '$app/state';
 	import type { SiteSetting } from '$backend/src/payload-types';
 	import { getContext } from 'svelte';
@@ -8,10 +8,9 @@
 	const siteSettings = getContext<{ settings: SiteSetting }>('site-settings')
 		.settings as SiteSetting;
 
-	$inspect(siteSettings);
-
 	const globalSEO = $derived(siteSettings.page_seo);
-	const pageURL = $derived(page.url.href);
+	const pageURL = $derived(main_url + page.route.id);
+
 	const homepageURL = $derived(page.url.origin);
 	const analytics = $derived(globalSEO?.analytics);
 
@@ -30,8 +29,8 @@
 	});
 
 	const og_title = $derived.by(() => {
-		if (pageSettings && pageSettings.page_seo && pageSettings.page_seo.meta_title) {
-			return pageSettings.page_seo.meta_title;
+		if (pageSettings?.meta?.title) {
+			return pageSettings?.meta?.title;
 		}
 		if (title) {
 			return title;
@@ -41,27 +40,30 @@
 
 	const site_name = $derived(globalSEO.site_name ?? globalSEO.default_title);
 	const og_image = $derived.by(() => {
-		if (pageSettings && pageSettings.page_seo && pageSettings.page_seo.meta_image) {
-			return pageSettings.page_seo.meta_image;
+		if (pageSettings?.meta?.image) {
+			return pageSettings.meta.image;
 		}
 		return globalSEO.default_og_image;
 	});
 	const keywords = $derived.by(() => {
-		if (pageSettings && pageSettings.page_seo && pageSettings.page_seo.keywords) {
-			return pageSettings.page_seo.keywords;
+		if (pageSettings?.meta?.keywords) {
+			return pageSettings?.meta?.keywords;
 		}
 		return globalSEO.default_keywords;
 	});
 
 	const og_description = $derived.by(() => {
-		if (pageSettings && pageSettings.page_seo && pageSettings.page_seo.meta_description) {
-			return pageSettings.page_seo.meta_description;
+		if (pageSettings?.meta?.description) {
+			return pageSettings.meta.description;
+		}
+		if (pageSettings?.og_description) {
+			return pageSettings.og_description;
 		}
 		return basicSettings.description ?? basicSettings.tagline ?? basicSettings.name ?? 'Nepaxis';
 	});
 	let preventIndexing = $derived.by(() => {
-		if (pageSettings && pageSettings.page_seo) {
-			return pageSettings.page_seo;
+		if (pageSettings?.prevent_indexing) {
+			return pageSettings.prevent_indexing;
 		}
 		return false;
 	});
@@ -118,7 +120,7 @@
 
 	<meta name="twitter:card" content="summary" />
 	<meta name="twitter:url" content={pageURL} />
-	{#if !preventIndexing}
+	{#if preventIndexing}
 		<meta name="robots" content="noindex, follow" />
 	{/if}
 

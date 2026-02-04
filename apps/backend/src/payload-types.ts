@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     categories: Category;
     articles: Article;
+    'seo-pages': SeoPage;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -82,6 +83,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     articles: ArticlesSelect<false> | ArticlesSelect<true>;
+    'seo-pages': SeoPagesSelect<false> | SeoPagesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -260,17 +262,46 @@ export interface Article {
     [k: string]: unknown;
   };
   cover_image: number | Media;
-  meta?: {
+  meta: {
     title?: string | null;
     description?: string | null;
     /**
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
     image?: (number | null) | Media;
+    keywords?: string | null;
+    prevent_indexing: boolean;
   };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "seo-pages".
+ */
+export interface SeoPage {
+  id: number;
+  page_title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  page_description: string;
+  og_image?: (number | null) | Media;
+  meta: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    keywords?: string | null;
+    prevent_indexing: boolean;
+  };
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -311,6 +342,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'articles';
         value: number | Article;
+      } | null)
+    | ({
+        relationTo: 'seo-pages';
+        value: number | SeoPage;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -483,10 +518,34 @@ export interface ArticlesSelect<T extends boolean = true> {
         title?: T;
         description?: T;
         image?: T;
+        keywords?: T;
+        prevent_indexing?: T;
       };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "seo-pages_select".
+ */
+export interface SeoPagesSelect<T extends boolean = true> {
+  page_title?: T;
+  generateSlug?: T;
+  slug?: T;
+  page_description?: T;
+  og_image?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        keywords?: T;
+        prevent_indexing?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

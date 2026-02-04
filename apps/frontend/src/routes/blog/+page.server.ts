@@ -1,6 +1,7 @@
 import type { PageServerLoad } from './$types';
 import { getPayloadClient } from '$lib/server/payload';
 import config from '$lib/config';
+import type { SeoPage } from '$backend/src/payload-types';
 
 const SERVER_SORT_CODES = [
 	{
@@ -22,6 +23,8 @@ const SERVER_SORT_CODES = [
 ];
 
 export const load: PageServerLoad = async ({ url }) => {
+	const PERMALINK = "blog";
+
 	const page = url.searchParams.get('page') || '1';
 	let sort = url.searchParams.get('sort') || config.blog.sorting;
 	const query = url.searchParams.get('query') || '';
@@ -85,7 +88,18 @@ export const load: PageServerLoad = async ({ url }) => {
 		collection: 'categories'
 	});
 
+	const page_seo = await payload.find({
+		collection: "seo-pages",
+		where: {
+			slug: {
+				equals: PERMALINK
+			},
+			limit: 1,
+		}
+	})
+
 	return {
+		page_seo: page_seo.docs[0] as SeoPage,
 		categories: categories.docs,
 		articles: result,
 		sorting_mode: sort,

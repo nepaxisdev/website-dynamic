@@ -1,8 +1,12 @@
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { lexicalEditor, EXPERIMENTAL_TableFeature } from '@payloadcms/richtext-lexical'
 import type { CollectionConfig } from 'payload'
 import { slugField } from 'payload'
 export const Articles: CollectionConfig = {
   slug: 'articles',
+  admin: {
+    useAsTitle: 'title',
+    group: 'Content',
+  },
 
   versions: {
     drafts: {
@@ -12,9 +16,7 @@ export const Articles: CollectionConfig = {
     },
     maxPerDoc: 50,
   },
-  admin: {
-    useAsTitle: 'title',
-  },
+
   fields: [
     { name: 'title', type: 'text', maxLength: 65, label: 'Main Heading', required: true },
     { name: 'short_quote', type: 'text', maxLength: 65, label: 'Short Quote', required: true },
@@ -46,7 +48,12 @@ export const Articles: CollectionConfig = {
       name: 'text',
       type: 'richText',
       label: 'Article',
-      editor: lexicalEditor({}),
+      editor: lexicalEditor({
+        features: ({ rootFeatures }) => [
+          ...rootFeatures,
+          EXPERIMENTAL_TableFeature(),
+        ],
+      }),
       required: true,
     },
     {

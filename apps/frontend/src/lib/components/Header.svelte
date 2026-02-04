@@ -15,7 +15,6 @@
 	const siteInfo = $derived(siteSettings.basic_settings);
 	const socials = $derived(siteSettings.social_media);
 	const contacts = $derived(siteInfo.contact);
-	$inspect(siteSettings);
 	type NavTheme = 'light' | 'dark' | 'invert';
 
 	let navToggled = $state<boolean>(false);

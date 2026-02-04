@@ -11,6 +11,16 @@
 	import { initDraggable } from '$lib/js/animations/draggable';
 	import Link from '$lib/components/Link/Link.svelte';
 	import SEO from '$lib/components/SEO/SEO.svelte';
+	import type { SeoPage } from '$backend/src/payload-types.js';
+
+	interface Props {
+		data: {
+			page_seo?: SeoPage;
+		};
+	}
+	const { data }: Props = $props();
+	const page_seo = $derived(data.page_seo);
+
 	$effect(() => {
 		initFloatingImages();
 		document.fonts.ready.then(() => {
@@ -23,7 +33,7 @@
 	});
 </script>
 
-<SEO pageSettings={{}} />
+<SEO pageSettings={page_seo} />
 
 <section
 	class="hero__section full-width content-grid"
