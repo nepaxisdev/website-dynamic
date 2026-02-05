@@ -95,14 +95,14 @@ export default buildConfig({
         },
       ]
     }),
-    ...(process.env.ENV_MODE === "prod" && process.env.DELPLOYMENT_STORAGE === "vercel" ? [
-      vercelBlobStorage({
-        enabled: true,
-        collections: {
-          media: true,
-        },
-        token: process.env.BLOB_READ_WRITE_TOKEN,
-      })
-    ] : [])
+
+    vercelBlobStorage({
+      enabled: true,
+      collections: {
+        media: true,
+      },
+      token: process.env.BLOB_READ_WRITE_TOKEN,
+    })
+
   ],
 });
