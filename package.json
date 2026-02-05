@@ -1,22 +1,23 @@
 {
-  "name": "nepaxis-monorepo",
-  "private": true,
-  "workspaces": [
-    "apps/frontend",
-    "apps/backend"
-  ],
-  "scripts": {
-    "dev:backend": "npm run dev -w apps/backend",
-    "dev:frontend": "npm run dev -w apps/frontend"
-  },
-  "devDependencies": {
-    "@payloadcms/db-postgres": "^3.72.0",
-    "@payloadcms/next": "^3.72.0",
-    "@payloadcms/plugin-seo": "^3.72.0",
-    "@payloadcms/richtext-lexical": "^3.72.0",
-    "payload": "^3.72.0"
-  },
-  "dependencies": {
-    "dotenv": "^17.2.3"
-  }
+	"name": "nepaxis-monorepo",
+	"private": true,
+	"workspaces": [
+		"apps/frontend",
+		"apps/backend"
+	],
+	"scripts": {
+		"dev:backend": "npm run dev -w apps/backend",
+		"dev:frontend": "npm run dev -w apps/frontend"
+	},
+	"devDependencies": {
+		"@payloadcms/storage-vercel-blob": "3.74.0",
+		"@payloadcms/db-postgres": "3.74.0",
+		"@payloadcms/next": "3.74.0",
+		"@payloadcms/plugin-seo": "3.74.0",
+		"@payloadcms/richtext-lexical": "3.74.0",
+		"payload": "3.74.0"
+	},
+	"dependencies": {
+		"dotenv": "^17.2.3"
+	}
 }
