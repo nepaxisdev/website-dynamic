@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "cross-env": "^7.0.3",
-    "dotenv": "16.4.7",
+    "dotenv": "^17.2.3",
     "graphql": "^16.8.1",
     "next": "15.4.10",
     "react": "19.2.1",
