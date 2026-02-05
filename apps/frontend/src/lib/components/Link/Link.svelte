@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { gsap } from 'gsap';
 	import { ScrollTrigger } from 'gsap/ScrollTrigger';
-	import { ScrollSmoother as SSM } from 'gsap/ScrollSmoother';
-	import type { ScrollSmoother } from 'gsap/ScrollSmoother';
+	import { ScrollSmoother } from 'gsap/ScrollSmoother';
 	import { getContext } from 'svelte';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
@@ -15,7 +14,7 @@
 		children,
 		...restProps
 	} = $props();
-	gsap.registerPlugin(ScrollTrigger, SSM);
+	gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
 	type SmoothType = { smooth: ScrollSmoother | null };
 
