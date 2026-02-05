@@ -1,5 +1,5 @@
 import { mdsvex } from 'mdsvex';
-import adapter from '@sveltejs/adapter-node';
+import adapter from '@sveltejs/adapter-vercel';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import path from 'path';
 
@@ -12,10 +12,10 @@ const config = {
 	kit: {
 		adapter: adapter(),
 		alias: {
-			$backend: path.resolve("../backend")
+			$backend: path.resolve('../backend')
 		},
 		env: {
-			dir: "../.."
+			dir: '../..'
 		}
 	},
 	extensions: ['.svelte', '.svx']
