@@ -42,9 +42,6 @@ export default buildConfig({
       connectionString: process.env.PRIVATE_DATABASE_URI!,
     },
     push: process.env.ENV_MODE === "dev" ? true : false,
-    ...(process.env.ENV_MODE === "prod" && {
-      migrationDir: path.resolve(__dirname, './src/migrations'),
-    })
   }),
   sharp,
   plugins: [
