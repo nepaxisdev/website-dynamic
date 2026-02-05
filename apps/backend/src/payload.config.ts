@@ -1,4 +1,5 @@
 import { config as dotenvConfig } from 'dotenv';
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -27,6 +28,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
+
   ...(process.env.ENV_MODE === "prod" && { cors: [process.env.PUBLIC_CLIENT_URL ?? ""] }),
   collections: [Users, Media, Categories, Articles, SEOPages],
   globals: [SiteSettings],
@@ -93,5 +95,14 @@ export default buildConfig({
         },
       ]
     }),
+    ...(process.env.ENV_MODE === "prod" && process.env.DELPLOYMENT_)STORAGE = "vercel" ? [
+      vercelBlobStorage({
+        enabled: true,
+        collections: {
+          media: true,
+        },
+        token: process.env.BLOB_READ_WRITE_TOKEN,
+      })
+    ] : [])
   ],
 });
