@@ -650,7 +650,7 @@
 		</ul>
 	</div>
 </section>
-<section class="full-width mb-0 mb-3xl-4 mb-3xl-9 fs-image" data-section="light">
+<section class="full-width fs-image" data-section="light">
 	<picture>
 		<img src="/images/bottom-image.png" class="h-full object-cover w-100" alt="Our Work Images" />
 	</picture>

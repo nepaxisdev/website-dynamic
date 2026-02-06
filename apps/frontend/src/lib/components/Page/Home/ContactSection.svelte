@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getContext, onMount, onDestroy } from 'svelte';
+	import { getContext, onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import { gsap } from 'gsap';
 	import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -293,7 +293,7 @@
 </script>
 
 <section
-	class="contact__section pt-8 pt-md-9 pt-xl-10 pb-4 pb-md-8 py-2xl-9 relative"
+	class="contact__section pt-8 pt-md-9 pt-xl-10 pb-4 pb-md-8 py-2xl-10 relative"
 	id="contact-section"
 	data-section="dark"
 	aria-labelledby="#contact-title"
@@ -454,7 +454,8 @@
 							>
 						</div>
 						<div class="mb-2">
-							<a class="link" href="tel:{contacts.phone_number_1}">{contacts.phone_number_1}</a>, {#if contacts?.phone_number_2}
+							<a class="link" href="tel:{contacts.phone_number_1}">{contacts.phone_number_1}</a
+							>{#if contacts?.phone_number_2},
 								<a class="link" href="tel:{contacts?.phone_number_2}">{contacts?.phone_number_2}</a
 								>{/if}
 						</div>

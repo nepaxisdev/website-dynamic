@@ -10,9 +10,10 @@
 	import { afterNavigate, beforeNavigate } from '$app/navigation';
 
 	import { initAnimations } from '$lib/js/animations';
-	import { onMount, setContext, type Snippet } from 'svelte';
+	import { tick, onMount, setContext, type Snippet } from 'svelte';
 	import Footer from '$lib/components/Footer/Footer.svelte';
 	import type { SiteSetting } from '$backend/src/payload-types';
+	import Loader from '$lib/components/Loader/Loader.svelte';
 	gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
 	interface Props {
@@ -36,27 +37,47 @@
 			return smooth;
 		}
 	});
+
 	beforeNavigate(() => {
 		showLoader = true;
+		if (smooth) smooth.paused(true);
 	});
-	afterNavigate(() => {
-		showLoader = false;
+	afterNavigate(async () => {
+		await tick();
+
+		// 2. Re-run your animation initializations
+		initAnimations();
+
+		// 3. Ensure ScrollTrigger knows about new page height
+		// We wait two frames to ensure layout paints are finished
+		requestAnimationFrame(() => {
+			requestAnimationFrame(() => {
+				ScrollTrigger.refresh();
+
+				// 4. Handle Hash jump if it exists in the new URL
+				const hash = window.location.hash;
+				if (smooth) {
+					if (hash) {
+						smooth.scrollTo(hash, true);
+					} else {
+						smooth.scrollTo(0, true);
+					}
+				}
+
+				// 5. Cleanup
+				if (smooth) smooth.paused(false);
+				showLoader = false;
+			});
+		});
 	});
 
 	onMount(() => {
 		smooth = ScrollSmoother.create({
 			smooth: 1,
 			effects: true,
-			smoothTouch: 0
-		});
-	});
-
-	$effect(() => {
-		showLoader = false;
-		initAnimations();
-
-		requestAnimationFrame(() => {
-			ScrollTrigger.refresh();
+			smoothTouch: 0,
+			wrapper: '#smooth-wrapper',
+			content: '#smooth-content'
 		});
 	});
 </script>
@@ -75,16 +96,11 @@
 </svelte:head>
 
 <Header />
-
+<svelte:body style:overflow={showLoader ? 'hidden' : 'auto'} />
 <main id="smooth-wrapper" class="content">
 	<div id="smooth-content" class="content-grid smooth-content">
 		{@render children()}
 		<Footer />
 	</div>
 </main>
-{#if showLoader}
-	<div id="loader" class="loading__screen">
-		<div id="loader-percent" class="loading__value"></div>
-		<canvas id="loading-matrix" class="loading__background"></canvas>
-	</div>
-{/if}
+<Loader show={showLoader} message="Syncing Interface" />

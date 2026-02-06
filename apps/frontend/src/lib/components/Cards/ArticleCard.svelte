@@ -1,10 +1,16 @@
 <script lang="ts">
 	import { PUBLIC_API_URL as media_url } from '$env/static/public';
+	import { fly } from 'svelte/transition';
+	import { cubicOut } from 'svelte/easing';
 	import { type Article } from '$backend/src/payload-types';
 	import defaultImage from '$lib/assets/default-image.webp';
 	import Tag from '$lib/components/Tag/Tag.svelte';
 	import moment from 'moment';
-	const { article: _article, tag }: { article: Article; tag: 'li' | 'article' } = $props();
+	const {
+		article: _article,
+		tag,
+		index = 0
+	}: { article: Article; tag: 'li' | 'article'; index?: number } = $props();
 
 	const article = $derived(_article);
 
@@ -45,7 +51,10 @@
 </script>
 
 {#if parent_tag === 'li'}
-	<li class="card article-card overflow-hidden fl-col">
+	<li
+		class="card article-card overflow-hidden fl-col"
+		in:fly={{ y: 25, duration: 300, delay: index * 100, easing: cubicOut }}
+	>
 		<div class="article-card__image-wrapper">
 			{#if typeof cover_image === 'number'}
 				<!-- Handle the case where cover_image is a number -->
@@ -93,7 +102,10 @@
 		</div>
 	</li>
 {:else}
-	<article class="card article-card overflow-hidden fl-col">
+	<article
+		class="card article-card overflow-hidden fl-col"
+		in:fly={{ y: 25, duration: 300, delay: index * 100, easing: cubicOut }}
+	>
 		<div class="article-card__image-wrapper">
 			<img
 				src={thumbnail}

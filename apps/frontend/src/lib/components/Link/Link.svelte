@@ -28,28 +28,21 @@
 			onClick();
 		}
 		if (scrollTo && smoothInstance) {
-			if (!href) {
-				console.log(href);
-				return;
-			}
-			const linkAddress = new URL(href, page.url.origin);
-			const linkPath = linkAddress.pathname;
-			const linkHash = linkAddress.hash;
+			const targetUrl = new URL(href, window.location.origin);
 
-			if (linkAddress) {
-				if (linkPath === '') {
-					smoothInstance.scrollTo(linkAddress.toString(), true, 'top 100px');
+			if (targetUrl.pathname === pathName) {
+				const hash = targetUrl.hash;
+				if (hash) {
+					smoothInstance.scrollTo(hash, true);
+					history.pushState(null, '', hash);
 				} else {
-					if (pathName === linkPath) {
-						smoothInstance.scrollTo(linkHash, true, 'top 100px');
-					} else {
-						goto(linkAddress);
-					}
+					history.pushState(null, '', pathName);
+					smoothInstance.scrollTo(0, true);
 				}
+			} else {
+				goto(href);
 			}
-		}
-
-		if (!smoothInstance || !scrollTo) {
+		} else {
 			goto(href);
 		}
 	}

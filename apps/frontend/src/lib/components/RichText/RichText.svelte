@@ -30,8 +30,6 @@
 
 	const { content, afterRun }: Props = $props();
 
-	$inspect(content);
-
 	interface UploadNode extends SerializedLexicalNode {
 		type: 'upload';
 		fields: {
@@ -184,8 +182,6 @@
 	}
 
 	const nodes = $derived((content?.root?.children as PayloadLexicalNode[]) || []);
-
-	$inspect(content);
 
 	onMount(() => {
 		if (afterRun) {

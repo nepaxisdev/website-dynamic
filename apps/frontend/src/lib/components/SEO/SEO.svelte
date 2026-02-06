@@ -70,7 +70,7 @@
 </script>
 
 <svelte:head>
-	<title>{title} | {globalSEO.title_suffix ?? basicSettings.name}</title>
+	<title>{title} {globalSEO.title_suffix ?? '| ' + basicSettings.name}</title>
 
 	<link rel="canonical" href={pageURL} />
 	<meta name="description" content={og_description} />

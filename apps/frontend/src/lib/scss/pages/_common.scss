@@ -6,11 +6,6 @@
 @use '../definitions/color-defs' as *;
 @use '../base/helpers/spacing-helper' as *;
 
-html,
-body {
-	scroll-padding-top: 5rem;
-}
-
 section {
 	position: relative;
 }

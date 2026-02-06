@@ -80,7 +80,8 @@ export const load: PageServerLoad = async ({ url }) => {
 		},
 		where: whereClause,
 		pagination: {
-			limit: config.blog.articlesPerPage
+			limit: config.blog.articlesPerPage,
+			page
 		}
 	});
 
